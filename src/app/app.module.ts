@@ -7,7 +7,6 @@ import { TecnicoAdminService } from './providers/tecnicoAdmin.service';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule, Injectable } from '@angular/core';
 import { RouterModule } from '@angular/router';
-import { NgxTawkModule } from 'ngx-tawk';
 import { FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AppRoutingModule } from './app-routing.module';
 import { HttpClientModule } from '@angular/common/http';
@@ -85,7 +84,6 @@ import { NgxSpinnerModule } from 'ngx-spinner';
     SharedModule,
     NgSelectModule,
     NgxPaginationModule,
-    NgxTawkModule,
     NgxSpinnerModule,
   ],
   providers: [

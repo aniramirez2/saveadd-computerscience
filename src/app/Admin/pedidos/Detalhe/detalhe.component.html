@@ -1,7 +1,7 @@
 <div class="row">
   <div class="col-lg-12 grid-margin">
     <div class="card">
-      <div class="card-body info" *ngIf="pedido != undefinded">
+      <div class="card-body info" >
         <h5 class="card-title">Dados do pedido</h5>
         <p><span>Número do pedido: </span> {{pedido.NumeroPedido}}</p>
         <p><span>Data e Hora: </span> {{dataPedido | date: 'dd/MM/yyy '}} {{horaPedido}}</p>
@@ -28,10 +28,10 @@
               <th>Total</th>
             </tr>
           </thead>
-          <tbody *ngIf="pedido != undefinded">
+          <tbody *ngIf="pedido ">
             <tr *ngFor="let item of pedido.Itens">
-              <td *ngIf="item.infoProduct != undefinded"> {{ getCodigo(item.infoProduct.CodigoBarras[0].TipoCodigoBarras)  }} - {{item.infoProduct.CodigoBarras[0].Codigo}}</td>
-              <td *ngIf="item.infoProduct != undefinded"> {{item.infoProduct.NomeProduto}}</td>
+              <td *ngIf="item.infoProduct "> {{ getCodigo(item.infoProduct.CodigoBarras[0].TipoCodigoBarras)  }} - {{item.infoProduct.CodigoBarras[0].Codigo}}</td>
+              <td *ngIf="item.infoProduct "> {{item.infoProduct.NomeProduto}}</td>
               <td> {{ item.Quantidade }}</td>
               <td> {{ item.ValorDesconto | currency:'BRL':true }} </td>
               <td> {{getTotalProduto(item) | currency:'BRL':true }}</td>
@@ -57,7 +57,7 @@
               <th>Usuário Inclusao</th>
             </tr>
           </thead>
-          <tbody *ngIf="pedido != undefinded">
+          <tbody *ngIf="pedido">
             <tr *ngFor="let item of pedido.HistoricoStatus">
               <td > {{ getNomeStatus(item.StatusPedido) }}</td>
               <td > {{item.Observacoes}}</td>
@@ -77,7 +77,7 @@
 <div class="row">
     <div class="col-lg-12 grid-margin">
       <div class="card">
-        <div class="card-body info" *ngIf="empresaAnunciante != undefinded">
+        <div class="card-body info" *ngIf="empresaAnunciante ">
           <h5 class="card-title">Empresa Fornecedora</h5>
           <p><span>Empresa: </span> {{empresaAnunciante.NomeEmpresa}}</p>
           <p><span>Razão Social: </span> {{empresaAnunciante.RazaoSocial}}</p>
@@ -105,7 +105,7 @@
   <div class="row">
         <div class="col-lg-12 grid-margin">
           <div class="card">
-            <div class="card-body info" *ngIf="empresaCompradora != undefinded">
+            <div class="card-body info" *ngIf="empresaCompradora ">
               <h5 class="card-title">Empresa Compradora</h5>
               <p><span>Empresa: </span> {{empresaCompradora.NomeEmpresa}}</p>
               <p><span>Razão Social: </span> {{empresaCompradora.RazaoSocial}}</p>
