@@ -1,0 +1,85 @@
+<div class="row justify-content-md-center">
+  <div class="col-md-8">
+    <div class="forms-sample">
+      <form #registerForm="ngForm">
+        <div class="card grid-margin">
+          <div class="container">
+            <div class="card-body row">
+              <div class="col-sm-12">
+                <h4 class="card-title">Dados do Usuário</h4>
+              </div>
+              <div class="col-sm-12 col-md-8 ">
+                <div class="form-group">
+                  <label for="nome_usuario" class="control-label">Nome</label>
+                  <input required [(ngModel)]="user.NomeUsuario" #name="ngModel" name="nome_usuario" class="form-control input-md" placeholder="Nome"
+                    type="text">
+                  <!--div class="alert alert-danger" [hidden]="name.valid || name.pristine">Seu nome é obrigatório</div-->
+
+                </div>
+              </div>
+              <div class="col-sm-12 col-md-4 ">
+                <div class="form-group">
+                  <label for="cpf" class="control-label">CPF</label>
+                  <input required [textMask]="{mask: masks.cpf}" #cpf="ngModel" [(ngModel)]="user.Cpf" name="cpf" class="form-control input-md"
+                    placeholder="CPF" type="text">
+                  <!--div class="alert alert-danger" [hidden]="cpf.valid || cpf.pristine">CPF é obrigatório</div-->
+                </div>
+              </div>
+
+              <div class='col-sm-12 col-md-8'>
+                <div class="form-group">
+                  <label class="control-label" for="email">Email</label>
+                  <input email [(ngModel)]="user.Email" #email="ngModel" required name="email" class="form-control input-md" type="email" placeholder="Email">
+                  <!--div class="alert alert-danger" [hidden]="email.valid || email.pristine">Email é obrigatório</div-->
+                </div>
+              </div>
+              <div class='col-sm-12 col-md-4'>
+                <div class="form-group">
+                  <label class="control-label" for="DataNascimento">Data Nascimento</label>
+                  <input [(ngModel)]="user.DataNascimento" #birthday="ngModel" name="dataNascimento" class="form-control input-md" type="date" required>
+                  <!--div class="alert alert-danger" [hidden]="birthday.valid || birthday.pristine">Data de nascimento é obrigatório</div-->
+                </div>
+              </div>
+
+              <div class='col-sm-6'>
+                <div class="form-group">
+                  <label class="control-label" for="Senha">Senha</label>
+                  <input required minlength="6" [(ngModel)]="user.Senha" class="form-control input-md" #password="ngModel" name="Senha" type="password"
+                    placeholder="Pelo menos 6 caracteres">
+                  <!--div class="alert alert-danger" [hidden]="password.valid || password.pristine">Senha é obrigatório</div-->
+                </div>
+              </div>
+              <div class="col-sm-6">
+                <div class="form-group">
+                  <label class="control-label" for="ConfirmarSenha">Confirmar Senha</label>
+                  <input [(ngModel)]="confirm_password" class="form-control input-md" #confirmation="ngModel" required name="confirm-password"
+                    type="password" placeholder="Confirmar Senha">
+                  <!--div class="alert alert-danger" [hidden]="confirmation.valid || confirmation.pristine">Confirmar Senha é obrigatório</div-->
+                  <div class="alert alert-danger" *ngIf="confirm_password && confirm_password != user.Senha">Senha e Confirmar não são iguais</div>
+                </div>
+              </div>
+              
+            </div>
+            <div class="row m-b-30">
+                <div class="col-md-3 offset-md-9 col-xs-12">
+                  <button (click)="register()" class="btn btn-success btn-adjust">
+                    <span *ngIf="!saving">
+                      Concluir
+                    </span>
+                    <app-loader *ngIf="saving" [type]="'inner'"></app-loader>
+                  </button>
+                </div>
+              </div>
+          </div>
+          
+        </div>
+        <div class="row">
+          <div class="col-sm-12">
+            <ngb-alert *ngIf="successMessage" type="success" (close)="successMessage = null">{{ successMessage }}</ngb-alert>
+          </div>
+        </div>
+       
+      </form>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,166 @@
+/*-------------------------------------------------------------------*/
+/* === Import Bootstrap functions and variables === */
+@import "~bootstrap/scss/bootstrap";
+@import "../node_modules/bootstrap/scss/functions";
+@import "../node_modules/bootstrap/scss/variables";
+/*-------------------------------------------------------------------*/
+/* === Import template variables === */
+@import "./assets/styles/variables";
+/*-------------------------------------------------------------------*/
+/* === SCSS Compass Functions === */
+@import "../node_modules/compass-mixins/lib/compass";
+@import "../node_modules/compass-mixins/lib/animate";
+/*-------------------------------------------------------------------*/
+/* === Boostrap Main SCSS === */
+@import "../node_modules/bootstrap/scss/bootstrap";
+/*-------------------------------------------------------------------*/
+
+/* === Fonts === */
+@import "../node_modules/mdi/scss/materialdesignicons";
+@import "../node_modules/font-awesome/scss/font-awesome";
+@import "../node_modules/simple-line-icons/scss/simple-line-icons";
+/*-------------------------------------------------------------------*/
+/* === Template mixins === */
+@import "./assets/styles/mixins/animation";
+@import "./assets/styles/mixins/accordions";
+@import "./assets/styles/mixins/background";
+@import "./assets/styles/mixins/badges";
+@import "./assets/styles/mixins/blockqoute";
+@import "./assets/styles/mixins/breadcrumbs";
+@import "./assets/styles/mixins/buttons";
+@import "./assets/styles/mixins/cards";
+@import "./assets/styles/mixins/misc";
+@import "./assets/styles/mixins/no-ui-slider";
+@import "./assets/styles/mixins/pagination";
+@import "./assets/styles/mixins/text";
+@import "./assets/styles/mixins/popovers";
+@import "./assets/styles/mixins/tabs";
+@import "./assets/styles/mixins/tooltips";
+/*-------------------------------------------------------------------*/
+/* === Core Styles === */
+@import "./assets/styles/reset";
+@import "./assets/styles/fonts";
+@import "./assets/styles/functions";
+@import "./assets/styles/sidebar";
+@import "./assets/styles/navbar";
+@import "./assets/styles/typography";
+@import "./assets/styles/misc";
+@import "./assets/styles/footer";
+@import "./assets/styles/layouts";
+@import "./assets/styles/utilities";
+@import "./assets/styles/dashboard";
+/*-------------------------------------------------------------------*/
+/* === Components === */
+@import "./assets/styles/components/accordions";
+@import "./assets/styles/components/badges";
+@import "./assets/styles/components/bootstrap-alerts";
+@import "./assets/styles/components/bootstrap-progress";
+@import "./assets/styles/components/buttons";
+@import "./assets/styles/components/breadcrumbs";
+@import "./assets/styles/components/cards";
+@import "./assets/styles/components/checkbox-radio";
+@import "./assets/styles/components/dropdown";
+@import "./assets/styles/components/forms";
+@import "./assets/styles/components/google-maps";
+@import "./assets/styles/components/icons";
+@import "./assets/styles/components/lists";
+@import "./assets/styles/components/loaders/loaders";
+@import "./assets/styles/components/modals";
+@import "./assets/styles/components/pagination";
+@import "./assets/styles/components/popovers";
+@import "./assets/styles/components/portfolio";
+@import "./assets/styles/components/preview";
+@import "./assets/styles/components/pricing-table";
+@import "./assets/styles/components/tables";
+@import "./assets/styles/components/tabs";
+@import "./assets/styles/components/settings-panel";
+@import "./assets/styles/components/timeline";
+@import "./assets/styles/components/todo-list";
+@import "./assets/styles/components/tooltips";
+@import "./assets/styles/components/user-profile";
+/*-------------------------------------------------------------------*/
+/* === Email === */
+@import "./assets/styles/components/mail-components/mail-sidebar";
+@import "./assets/styles/components/mail-components/mail-list-container";
+@import "./assets/styles/components/mail-components/messagecontent";
+/*-------------------------------------------------------------------*/
+/* === Plugin overrides === */
+@import "./assets/styles/components/plugin-overrides/ace";
+@import "./assets/styles/components/plugin-overrides/avgrund";
+@import "./assets/styles/components/plugin-overrides/bootstrap-tour";
+@import "./assets/styles/components/plugin-overrides/chartjs";
+@import "./assets/styles/components/plugin-overrides/chartist";
+@import "./assets/styles/components/plugin-overrides/codemirror";
+@import "./assets/styles/components/plugin-overrides/colcade";
+@import "./assets/styles/components/plugin-overrides/colorpicker";
+@import "./assets/styles/components/plugin-overrides/context-menu";
+@import "./assets/styles/components/plugin-overrides/clockpicker";
+@import "./assets/styles/components/plugin-overrides/data-tables";
+@import "./assets/styles/components/plugin-overrides/datepicker";
+@import "./assets/styles/components/plugin-overrides/dropify";
+@import "./assets/styles/components/plugin-overrides/dropzone";
+@import "./assets/styles/components/plugin-overrides/flot-chart";
+@import "./assets/styles/components/plugin-overrides/full-calendar";
+@import "./assets/styles/components/plugin-overrides/google-charts";
+@import "./assets/styles/components/plugin-overrides/icheck";
+@import "./assets/styles/components/plugin-overrides/jquery-file-upload";
+@import "./assets/styles/components/plugin-overrides/js-grid";
+@import "./assets/styles/components/plugin-overrides/jvectormap";
+@import "./assets/styles/components/plugin-overrides/light-gallery";
+@import "./assets/styles/components/plugin-overrides/no-ui-slider";
+@import "./assets/styles/components/plugin-overrides/owl-carousel";
+@import "./assets/styles/components/plugin-overrides/progressbar-js";
+@import "./assets/styles/components/plugin-overrides/pws-tabs";
+@import "./assets/styles/components/plugin-overrides/quill";
+@import "./assets/styles/components/plugin-overrides/rating";
+//@import "./assets/styles/components/plugin-overrides/select2";
+@import "./assets/styles/components/plugin-overrides/summernote";
+@import "./assets/styles/components/plugin-overrides/sweet-alert";
+@import "./assets/styles/components/plugin-overrides/switchery";
+@import "./assets/styles/components/plugin-overrides/tags";
+@import "./assets/styles/components/plugin-overrides/tinymce";
+@import "./assets/styles/components/plugin-overrides/toast";
+@import "./assets/styles/components/plugin-overrides/typeahead";
+@import "./assets/styles/components/plugin-overrides/wysieditor";
+@import "./assets/styles/components/plugin-overrides/x-editable";
+@import "./assets/styles/components/plugin-overrides/wizard";
+/*-------------------------------------------------------------------*/
+/* === Landing screens === */
+@import "./assets/styles/landing-screens/auth";
+@import "./assets/styles/landing-screens/error";
+@import "./assets/styles/landing-screens/landing";
+/*-------------------------------------------------------------------*/
+@import "./assets/styles/demo";
+
+.card {
+    border: 0;
+    border-radius: 2px;
+    border: 1px solid #DDD;
+}
+ul li{list-style: none;}
+.mt-24{
+    margin-top: 24px
+}
+.ng-select.custom {
+    z-index: 4;
+    border:1px;border:1px;
+    min-height: 0px;
+    border-radius: 0;
+  }
+  .ng-select.ng-select-multiple .ng-select-container .ng-value-container .ng-value {
+    white-space: nowrap;
+    padding: 5px !important;
+    border: 1px solid darkgrey !important ;
+    margin: 5px !important;
+  }
+  .ng-select.custom .ng-select-container  {            
+    min-height: 0px;
+    border-radius: 0;
+    border:1px solid gray;
+  }
+  .swal-text {
+    text-align: center !important;
+  }
+  .swal-modal {
+    align-content: center !important;
+  }

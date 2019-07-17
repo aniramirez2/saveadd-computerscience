@@ -1,0 +1,94 @@
+<ngb-datepicker class="datepicker" [displayMonths]="1" [navigation]="true"
+[showWeekNumbers]="false" *ngIf="bool" (select)="onDateSelect($event)"></ngb-datepicker>
+<ngx-spinner 
+bdColor="rgba(51,51,51,0.8)"
+size="large"
+color="#00a99d"
+type="line-scale">
+<p style="font-size: 20px; color: #00a99d">Carregando...</p>
+</ngx-spinner>
+<div class="row">
+  <div class="col-lg-12 grid-margin">
+    <div class="card">
+      <div class="card-body">
+        <h4 class="card-title">Pedidos</h4>
+        
+        <div class="row">
+          <div class="col-12">
+              
+             <table id="order-listing" class="table">
+              <thead>
+                <tr class="bg-primary text-white">
+                  <th>Data 
+                    <i class="fa fa-calendar" (click)="bool = !bool;" style="cursor:pointer"></i> 
+                    <i class="fa fa-sort" (click)="sort()" style="cursor:pointer"></i>
+                  </th>
+                  <th># do Pedido</th>
+                  <th>Fornecedor 
+                    <i class="fa fa-search"></i>
+                  </th>
+                  <th>Comprador
+                    <i class="fa fa-search"></i>                    
+                  </th>
+                  <th>Valor</th>
+                  <th>Status<i class="fa fa-caret-down"></i></th>
+                  <th>Ação</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let pedido of pedidos">
+                  <td>{{pedido.DataInclusao | date: 'dd/MM/yyy'}}</td>
+                  <td> {{pedido.NumeroPedido}}</td>
+                  <td> {{pedido.EmpresaAnunciante}} </td>
+                  <td> {{pedido.EmpresaComprador}} </td>
+                  <td>{{ getTotal(pedido) | currency:'BRL':true }}</td>
+                  <td *ngIf="pedido.StatusPedido === 1 || pedido.StatusPedido === 0">
+                      <label class="badge badge-primary"> {{ pedido.StatusPedidoNome }}</label>
+                    </td>
+                    <td *ngIf="pedido.StatusPedido === 2 || pedido.StatusPedido === 7 || pedido.StatusPedido === 9 ">
+                      <label class="badge badge-success"> {{ pedido.StatusPedidoNome  }}</label>
+                    </td>
+                    <td *ngIf="pedido.StatusPedido === 3 || pedido.StatusPedido === 6 || pedido.StatusPedido === 8">
+                      <label class="badge badge-info"> {{ pedido.StatusPedidoNome  }} </label>
+                    </td>
+                    <td *ngIf="pedido.StatusPedido === 4">
+                      <label class="badge badge-warning"> {{ pedido.StatusPedidoNome }} </label>
+                    </td>
+                    <td *ngIf="pedido.StatusPedido === 5">
+                      <label class="badge badge-danger"> {{ pedido.StatusPedidoNome }} </label>
+                    </td>
+                  <td>
+                    <!--<button class="btn btn-light">
+                      <i class="mdi mdi-eye text-primary"></i>Mais Detalhes
+                    </button> -->
+                    <button class="btn btn-light" (click)="viewPedido(pedido.IdPedido)">
+                      <i class="mdi mdi-mdi-eye text-primary"></i>Mais Detalhes
+                    </button>
+                  </td>
+                </tr>
+                <tr>
+                  <td colspan="4">Total: 
+                    <span *ngIf="pedidos.length > 1">{{pedidos.length}}</span>
+                    <span *ngIf="pedidos.length < 1">0</span>
+                  </td>
+                  <td colspan="3">Total: {{getTotalAllPedidos() | currency:'BRL':true}}</td>
+                </tr>
+
+                
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div class="container" *ngIf="pedidos.length < 1">
+          <div class="row">
+            <div class="col-sm-12">
+              <h3>Não há pedidos no momento</h3>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+

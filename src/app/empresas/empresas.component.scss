@@ -1,0 +1,15 @@
+@import '../../styles';
+.empresa-name {
+    color: #46a79a;
+    &:hover {
+        cursor: pointer;
+    }
+}
+
+.add-filial,
+.edit-empresa,
+.remove-filial {
+    &:hover {
+        cursor: pointer;
+    }
+}

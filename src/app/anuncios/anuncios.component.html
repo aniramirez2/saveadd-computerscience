@@ -1,0 +1,63 @@
+<div class="row">
+  <div class="col-lg-12 grid-margin stretch-card">
+    <div class="card">
+      <div class="card-body">
+        <h4 class="card-title">Anúncios</h4>
+
+        <div class="row">
+          <div class="col-md-2 offset-md-10">
+            <a class="btn btn-success" routerLink="/anuncios/novo" style="color: #FFF; width: 100%">
+              <i class="fa fa-plus"></i> Novo </a>
+          </div>
+        </div>
+        <br/>
+        <div class="row">
+          <div class="col-12">
+            <table id="order-listing" class="table">
+              <thead>
+                <tr class="bg-primary text-white">
+                  <th>Titulo do Anúncio</th>
+                  <th class="hidden-sm-down">Data Publicação</th>
+                  <th class="hidden-sm-down">Data Fim</th>
+                  <th class="hidden-sm-down">Status</th>
+                  <th>Ação</th>
+                  <th>-</th>
+                </tr>
+              </thead>
+              <app-loader *ngIf="loading_page"></app-loader>
+              <tbody *ngIf="!loading_page">
+                <tr *ngFor="let anuncio of ads | paginate: { itemsPerPage: 8, currentPage: p }">
+                  <td>{{anuncio.Titulo}}</td>
+                  <td class="hidden-sm-down">{{getDate(anuncio.DataInicio) }}</td>
+                  <td class="hidden-sm-down">{{getDate(anuncio.DataFim) }}</td>
+                  <td class="hidden-sm-down">
+                    <label *ngIf="anuncio.StatusAnuncio == 0" class="badge badge-warning">Inativo</label>
+                    <label *ngIf="anuncio.StatusAnuncio == 1" class="badge badge-success">Ativo</label>
+                  </td>
+                  <td>
+                    <button [routerLink]="['/anuncios/edit/', anuncio.IdAnuncio]" class="btn btn-light">
+                      <i class="mdi mdi-eye text-primary"></i> <span class="hidden-sm-down">Editar</span>
+                    </button>
+                  </td>
+                  <td>
+                    <span class="badge badge-pill badge-danger" (click)="removeAnuncio(anuncio.IdAnuncio)">
+                      <i  class="fa  fa-trash-o"></i> <span class="hidden-sm-down">Remover anúncio</span> 
+                    </span>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+            <div class="col-lg-12 ">
+                <div class="row justify-content-center">
+                    <pagination-controls previousLabel="Anterior"
+                    nextLabel="Seguinte" (pageChange)="p = $event"></pagination-controls>
+
+                </div>
+              </div>
+          </div>
+        </div>
+        
+      </div>
+    </div>
+  </div>
+</div>

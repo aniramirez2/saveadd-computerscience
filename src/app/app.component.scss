@@ -1,0 +1,45 @@
+@import '../styles';
+
+:host {
+    padding: 0;
+    margin: 0;
+    overflow-x: hidden;
+    font-size: 1rem;
+    font-family: 'roboto-regular', sans-serif;
+
+    .larger{
+      width: 100%;
+    }
+}
+#ngb-slide-1{
+  display: none
+}
+ol .carousel-indicators{
+  display: none
+}
+.mt-24{
+  margin-top: 24px;
+}
+.modal-content {
+  position: relative;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  width: 50% !important;
+  pointer-events: auto;
+  background-color: #f4f4f8;
+  background-clip: padding-box;
+  border: 1px solid #CCC;
+  border-radius: 0.3rem;
+  outline: 0;
+  margin: auto !important;
+}
+@media (max-width: 767px) {
+  .hidden-xs {
+    display: none !important;
+  }
+}

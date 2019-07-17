@@ -1,0 +1,89 @@
+
+.ng-select.custom {
+  z-index: 4;
+  border:1px;border:1px;
+  min-height: 0px;
+  border-radius: 0;
+}
+.m-t{
+  margin-top: -45px
+}
+.m-t-title{
+  margin-top: -25px
+}
+.m-b-final{
+  margin-bottom: 20px
+}
+.fill{
+  width: stretch;
+}
+.ng-select.ng-select-multiple .ng-select-container .ng-value-container .ng-value {
+  white-space: nowrap;
+  padding: 5px !important;
+  border: 1px solid darkgrey !important ;
+  margin: 5px !important;
+}
+.ng-select.custom .ng-select-container  {            
+  min-height: 0px;
+  border-radius: 0;
+  border:1px solid gray;
+}
+.form-control.ng-pristine.ng-invalid.ng-touched {
+  border: 1px solid red;
+}
+.required-field{
+  color: red !important;
+  font-size: smaller !important;
+}
+.forms-sample .img-login{
+  display: block;
+  margin: 0 auto;
+  height: 110px;
+}
+.inputCheck{
+  margin: 0;
+}
+.btn-success.disabled, .btn-success:disabled {
+  color: #fff;
+  background-color: #777;
+  border-color: #333;
+}
+
+.mensagem-valida-cnpj{
+  animation: fadein 4s;
+  -moz-animation: fadein 4s; /* Firefox */
+  -webkit-animation: fadein 4s; /* Safari and Chrome */
+  -o-animation: fadein 4s; /* Opera */
+}
+@keyframes fadein {
+  from {
+      opacity:0;
+  }
+  to {
+      opacity:1;
+  }
+}
+@-moz-keyframes fadein { /* Firefox */
+  from {
+      opacity:0;
+  }
+  to {
+      opacity:1;
+  }
+}
+@-webkit-keyframes fadein { /* Safari and Chrome */
+  from {
+      opacity:0;
+  }
+  to {
+      opacity:1;
+  }
+}
+@-o-keyframes fadein { /* Opera */
+  from {
+      opacity:0;
+  }
+  to {
+      opacity: 1;
+  }
+}

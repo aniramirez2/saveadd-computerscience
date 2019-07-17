@@ -1,0 +1,72 @@
+<ngx-spinner 
+bdColor="rgba(51,51,51,0.8)"
+size="large"
+color="#00a99d"
+type="line-scale">
+<p style="font-size: 20px; color: #00a99d">Carregando...</p>
+</ngx-spinner>
+<div class="row">
+  <div class="col-lg-12 grid-margin">
+    <div class="card">
+      <div class="card-body">
+        <h4 class="card-title">Deferimento</h4>
+        
+        <div class="row">
+          <div class="col-12">
+              
+             <table id="order-listing" class="table">
+              <thead>
+                <tr class="bg-primary text-white">
+                  <th>Data</th>
+                  <th>Empresa</th>
+                  <th>Tipo Empresa</th>
+                  <th>Usuario</th>
+                  <th>Status Deferimento</th>
+                  <th>Ação</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let deferimento of deferimentos">
+                  <td>{{deferimento.DataInclusao  | date: 'dd/MM/yyy' }}</td>
+                  <td> {{ deferimento.NomeEmpresa }} </td>
+                  <td> {{ deferimento.TipoEmpresa }} </td>
+                  <td> {{ deferimento.NomeUsuario }} </td>
+                  <td *ngIf="deferimento.StatusDeferimento === 0">
+                    <label class="badge badge-info ">Pendente  </label>
+                  </td>
+                  <td *ngIf="deferimento.StatusDeferimento === 1">
+                    <label class="badge badge-success">Aprovado  </label>
+                  </td>
+                  <td *ngIf="deferimento.StatusDeferimento === 2">
+                    <label class="badge badge-danger">Cancelado  </label>
+                  </td>                  
+                  <td>
+                    
+                      <button class="btn btn-light" (click)="detalhe(deferimento)">
+                        <i class="fa fa-eye" style="color:blue"></i>
+                      </button>
+                  </td>
+                </tr>
+                <tr>
+                  
+                </tr>
+
+                
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div class="container" *ngIf="deferimentos.length < 1">
+          <div class="row">
+            <div class="col-sm-12">
+              <h3>Não há deferimentos no momento</h3>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+

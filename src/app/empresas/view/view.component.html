@@ -1,0 +1,426 @@
+<div class="row">
+  <div class="col-lg-12 grid-margin">
+    <!--button routerLink="/empresas" class="btn btn-default return">Voltar</button-->
+    <div class="card grid-margin">
+      <div class="card-body">
+        <h4 class="card-title">Editar Empresa</h4>
+        <app-loader *ngIf="loading_page"></app-loader>
+        <ngb-tabset class="tab-basic" *ngIf="!loading_page">
+          <ngb-tab>
+            <ng-template ngbTabTitle>
+              <h4>Detalhes da Empresa:
+                <span class="text-muted">{{empresa?.Cnpj}}</span>
+              </h4>
+            </ng-template>
+            <ng-template ngbTabContent>
+              <form #editEmpresa class="row">
+                <div class="form-group col-sm-6">
+                  <label>Razão Social</label>
+                  <input class="form-control" disabled name="raz-social" [ngModel]="empresa?.RazaoSocial" (ngModelChange)="empresa.RazaoSocial = $event">
+                </div>
+                <div class="form-group col-sm-6">
+                  <label>Nome fantasia</label>
+                  <input class="form-control" [disabled]="!edit"  name="nome" [ngModel]="empresa?.NomeEmpresa" (ngModelChange)="empresa.NomeEmpresa = $event">
+                </div>
+
+                <div class="form-group col-sm-6">
+                  <label>Inscrição Estadual</label>
+                  <input class="form-control" [disabled]="!edit" name="inscricao" [ngModel]="empresa?.InscricaoEstadual ? empresa?.InscricaoEstadual : 'Isento'" (ngModelChange)="empresa.InscricaoEstadual = $event">
+                </div>                
+              </form>
+              <div class="row">
+                  <div class="form-group col-md-2 offset-md-10">
+                   <button *ngIf="!edit" (click)="edit = true" class="btn btn-info pull-right fill">Editar</button>
+                  </div> 
+                  <div class="form-group col-md-2 offset-md-8">
+                      <button *ngIf="edit" (click)="edit = false" class="btn btn-default fill">
+                        Cancelar
+                      </button> 
+                     </div> 
+                  <div class="form-group col-md-2 ">
+                   <button *ngIf="edit" (click)="update()" class="btn btn-success fill">
+                     <span *ngIf="!updating">
+                       Salvar
+                     </span>
+                     <app-loader *ngIf="updating" [type]="'inner'"></app-loader>
+                   </button>
+                  </div>                                  
+                </div>
+            </ng-template>
+          </ngb-tab>
+
+          <ngb-tab>
+            <ng-template ngbTabTitle>
+              <h4>Endereço
+              </h4>
+            </ng-template>
+            <ng-template ngbTabContent>
+              <form #editEndereco class="row border-bottom mb-2" *ngFor="let address of empresa.Enderecos; let i = index" [attr.data-index]="i">
+                <div class="container-fluid">
+                  <div class="row">  
+                    <div [hidden]="!edit" class="col-md-2 offset-md-10  text-rigth">
+                      <span class="badge badge-pill badge-danger" (click)="removeEndereco(address,i)">
+                        <i  class="fa  fa-trash-o"></i> Remover endereço
+                      </span>
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="form-group col-md-6">
+                    <label>Tipo Endereço</label>                        
+                    <select [disabled]="!edit" class="form-control" [ngModel]="address.TipoEndereco" [ngModelOptions]="{standalone: true}"  (change)="addTipoEndereco($event.target.value, i)">
+                      <option  disabled selected [value]="address.TipoEndereco"></option>
+                      <option *ngFor="let prf of allProfiles" [ngValue]="prf.Id" >
+                          {{ prf.Nome }}
+                      </option>
+                    </select> 
+                  </div>
+                  <div class="form-group col-md-6">  
+                    <label>Nome Endereço</label>
+                    <input class="form-control" [disabled]="!edit" [disabled]="!edit" name="tipo" [(ngModel)]="address.NomeEndereco">
+                  </div>
+                  <div class="form-group col-md-12">
+                    <label>Logradouro</label>
+                    <input class="form-control" [disabled]="!edit" name="logradouro" [(ngModel)]="address.Logradouro">
+                  </div>
+                  <div class="form-group col-md-4">
+                    <label>Número</label>
+                    <input class="form-control" [disabled]="!edit" required name="numero" [(ngModel)]="address.Numero">
+                  </div>
+                  <div class="form-group col-md-4">
+                    <label>Complemento</label>
+                    <input class="form-control" [disabled]="!edit" name="complemento" [(ngModel)]="address.Complemento">
+                  </div>                
+                  <div class="form-group col-md-4">
+                    <label>Bairro</label>
+                    <input class="form-control" [disabled]="!edit" required name="bairro" [(ngModel)]="address.Bairro">
+                  </div>
+                  <div class="form-group col-md-4">
+                    <label>CEP</label>
+                    <input class="form-control" [disabled]="!edit" name="raz-social" [(ngModel)]="address.Cep">
+                  </div>
+                  <div class="form-group col-md-4">
+                    <label>Cidade</label>
+                    <input class="form-control" [disabled]="!edit"  name="cidade" [(ngModel)]="address.Cidade">
+                  </div>
+                  <div class='col-md-4 form-group'>
+                    <label>Estado</label>    
+                    <select #t [disabled]="!edit" name="estado" class="form-control" [ngModel]="address.Estado"  (change)="selectState(t.value , i)">
+                      <option disabled selected  [value]="address.Estado"></option>
+                      <option  *ngFor="let es of estados" [ngValue]="es.IdEstado">
+                        {{es.NomeEstado}}
+                      </option>
+                    </select>
+                  </div>
+                </div>
+                
+                <div class="row" style="width:100%">                    
+                  <div class="form-group col-md-6">
+                    <div class="input-group" >
+                        <div class=" form-check-inline">
+                          <input [disabled]="!edit" [checked]="address.RealizaEntrega == 1" (change)="address.RealizaEntrega = address.RealizaEntrega == 1? 0: 1"
+                          type="checkbox" class="form-check-input" id="entrega" name="entrega">
+                          <label class="form-check-label" for="entrega" style="float: left;">Realiza entrega</label>
+                        </div>
+                    </div>
+                    <div *ngIf="address.RealizaEntrega == 1">
+                      <div class="form-group " style="margin-top:15px">
+                        <label>Regras de entrega</label>
+                        <input class="form-control" [disabled]="!edit"  name="regrasEntrega" [(ngModel)]="address.RegraEntrega">
+                      </div>
+                    </div>
+                  </div>
+                  <div class="form-group col-md-6">                    
+                      <div class="input-group" >
+                          <div class=" form-check-inline">
+                              <input [disabled]="!edit" [checked]="address.PermiteRetirada == 1" (change)="address.PermiteRetirada = address.PermiteRetirada == 1? 0: 1"
+                              type="checkbox" class="form-check-input" id="recebe" name="recebe">
+                              <label class="form-check-label" for="recebe" style="float: left;">Aceita retirada</label>
+                          </div>
+                      </div>
+                    <div *ngIf="address.PermiteRetirada == 1">
+                      <div class="form-group " style="margin-top:15px">
+                        <label>Regras de retirada</label>
+                        <input class="form-control" [disabled]="!edit"  name="regrasRetirada" [(ngModel)]="address.RegraRetirada">
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+
+              </form>
+              <div class="row">
+                  
+                  <div class="form-group col-md-2 offset-md-7">
+                   <button *ngIf="!edit" (click)="edit = true" class="btn btn-info pull-right fill">Editar</button>
+                  </div> 
+                  <div class="form-group col-md-3">
+                      <button *ngIf="!edit" (click)="openAddAddressModal()" class="btn btn-success pull-right fill">Adicionar Endereço</button>
+                    </div> 
+                  <div class="form-group col-md-2 offset-md-8">
+                      <button *ngIf="edit" (click)="edit = false" class="btn btn-default fill">
+                        Cancelar
+                      </button> 
+                     </div> 
+                  <div class="form-group col-md-2 ">
+                   <button *ngIf="edit" (click)="update()" class="btn btn-success fill">
+                     <span *ngIf="!updating">
+                       Salvar
+                     </span>
+                     <app-loader *ngIf="updating" [type]="'inner'"></app-loader>
+                   </button>
+                  </div>                                  
+                </div>
+            </ng-template>
+          </ngb-tab>
+
+          <ngb-tab>
+            <ng-template ngbTabTitle>
+              <h4>Contato
+              </h4>
+            </ng-template>
+            <ng-template ngbTabContent>
+              <form #editEndereco class="row" *ngFor="let endereco of empresa?.Telefones">
+                <div class="form-group col-sm-4">
+                  <label>Area</label>
+                  <input class="form-control" [disabled]="!edit" name="area" [(ngModel)]="endereco.Area">
+                </div>
+                <div class="form-group col-sm-4">
+                  <label>Numero</label>
+                  <input class="form-control" [disabled]="!edit" name="numero" [(ngModel)]="endereco.Numero">
+                </div>
+                <div class="form-group col-sm-4">
+                  <label>Ramal</label>
+                  <input class="form-control" [disabled]="!edit" name="ramal" [(ngModel)]="endereco.Ramal">
+                </div>
+                
+              </form>
+              <div class="form-group col-sm-12">
+                <label>E-mail para NFE</label>
+                <input class="form-control" [disabled]="!edit" name="emailf" [(ngModel)]="empresa.EmailFiscal" type="text">
+            </div>
+            <div class="row">
+                <div class="form-group col-md-2 offset-md-10">
+                 <button *ngIf="!edit" (click)="edit = true" class="btn btn-info pull-right fill">Editar</button>
+                </div> 
+                <div class="form-group col-md-2 offset-md-8">
+                    <button *ngIf="edit" (click)="edit = false" class="btn btn-default fill">
+                      Cancelar
+                    </button> 
+                   </div> 
+                <div class="form-group col-md-2 ">
+                 <button *ngIf="edit" (click)="update()" class="btn btn-success fill">
+                   <span *ngIf="!updating">
+                     Salvar
+                   </span>
+                   <app-loader *ngIf="updating" [type]="'inner'"></app-loader>
+                 </button>
+                </div>                                  
+              </div>
+            </ng-template>
+          </ngb-tab>
+
+          <ngb-tab> 
+              <ng-template ngbTabTitle>
+                <h4>Recebimento
+                </h4>
+              </ng-template>
+              <ng-template ngbTabContent>
+                <form #editFormaRecebimento class="row">
+                  <div  class="form-group col-sm-12">
+                    <div class=""  *ngFor="let item of formasPagamentos">                      
+                        <input type="checkbox" [value]="item.IdFormaPagamento" [checked]="item.isChecked" [disabled]="!edit"
+                        (change)="selectedItem(item,$event)"/> <label>{{item.NomeFormaPagamento}} </label>
+                    </div>
+                    <div >
+                      <div *ngIf="empresa.DadosBancarios[0] != undefined && showDadosBancarios" class="row" >
+                          <div class="form-group col-lg-4">
+                            <label>Nome da conta</label>
+                            <input  class="form-control" [disabled]="!edit"  name="nomeConta" [(ngModel)]="empresa.DadosBancarios[0].NomeDadosBancarios">
+                          </div>
+                          <div class="form-group col-lg-4">
+                            <label>Nome do titular</label>
+                            <input class="form-control" [disabled]="!edit"  name="nomeTitular" [(ngModel)]="empresa.DadosBancarios[0].NomeTitular">
+                          </div>
+                          <div class="form-group col-lg-4">
+                            <label>Cnpj</label>
+                            <input [textMask]="{mask: masks.cnpj}" class="form-control" [disabled]="!edit" (change)="validateCnpj()"  name="cnpj" [(ngModel)]="empresa.DadosBancarios[0].CpfCnpjTitular">
+                          </div>
+                          <div class="form-group col-lg-3">
+                            <label>Nome do Banco</label>
+                            <input class="form-control" [disabled]="!edit"  name="nomeBanco" [(ngModel)]="empresa.DadosBancarios[0].NomeBanco">
+                          </div>
+                          <div class="form-group col-lg-2">
+                            <label>Número da Agência</label>
+                            <input type="number" class="form-control" [disabled]="!edit"  name="nomeAgencia" [(ngModel)]="empresa.DadosBancarios[0].NumeroAgencia">
+                          </div>
+                          <div class="form-group col-lg-2">
+                            <label>Digito da Agência</label>
+                            <input type="number" class="form-control" [disabled]="!edit"  name="digitoAgencia" [(ngModel)]="empresa.DadosBancarios[0].DigitoAgencia">
+                          </div>
+                          <div class="form-group col-lg-3">
+                            <label>Número da Conta</label>
+                            <input  type="number" class="form-control" [disabled]="!edit"  name="numeroConta" [(ngModel)]="empresa.DadosBancarios[0].NumeroConta">
+                          </div>
+                          <div class="form-group col-lg-2">
+                            <label>Digito da Conta</label>
+                            <input type="number" class="form-control" [disabled]="!edit"  name="digitoConta" [(ngModel)]="empresa.DadosBancarios[0].DigitoConta">
+                          </div>
+                        </div>
+                      </div>                      
+                   </div>                  
+                </form>
+                <div class="row">
+                    <div class="form-group col-md-2 offset-md-10">
+                     <button *ngIf="!edit" (click)="edit = true" class="btn btn-info pull-right fill">Editar</button>
+                    </div> 
+                    <div class="form-group col-md-2 offset-md-8">
+                        <button *ngIf="edit" (click)="edit = false" class="btn btn-default fill">
+                          Cancelar
+                        </button> 
+                       </div> 
+                    <div class="form-group col-md-2 ">
+                     <button *ngIf="edit" (click)="update()" class="btn btn-success fill">
+                       <span *ngIf="!updating">
+                         Salvar
+                       </span>
+                       <app-loader *ngIf="updating" [type]="'inner'"></app-loader>
+                     </button>
+                    </div>                                  
+                  </div>
+              </ng-template>
+            </ngb-tab>
+            <ngb-tab> 
+              <ng-template ngbTabTitle>
+                <h4>Intenções
+                </h4>
+              </ng-template>
+              <ng-template ngbTabContent>
+                <form #editIntencoes class="col-lg-12">
+                  <div class="row" *ngFor="let item of intencoes" >
+                    <div class="col-lg-12" *ngIf="item.show" >
+                        <input  type="checkbox" [value]="item.IdIntencao" [checked]="item.isChecked" [disabled]="!edit"
+                        (change)="selectedIntencao(item,$event)" style="max-width:100px"/> {{item.NomeIntencao}}
+                    </div>                     
+                    
+                  </div>
+                  <div class="row" *ngFor="let item of intencoes">
+                    <div *ngIf="item.IdIntencao === 2 && item.isChecked" class="col-sm-6" style="margin-top: 15px">
+                      <div class="form-group">
+                        <label >Valor mínimo de venda</label>
+                        <input currencyMask  [options]="{ prefix: '', thousands: '.', decimal: ',' }" type="text" class="form-control col-sm-4" [(ngModel)]="empresa.ValorPedidoMinimo" [ngModelOptions]="{standalone: true}"/>
+                      </div>
+                    </div>
+                  </div>
+                </form>
+                <div class="row">
+                    <div class="form-group col-md-2 offset-md-10">
+                     <button *ngIf="!edit" (click)="edit = true" class="btn btn-info pull-right fill">Editar</button>
+                    </div> 
+                    <div class="form-group col-md-2 offset-md-8">
+                        <button *ngIf="edit" (click)="edit = false" class="btn btn-default fill">
+                          Cancelar
+                        </button> 
+                       </div> 
+                    <div class="form-group col-md-2 ">
+                     <button *ngIf="edit" (click)="update()" class="btn btn-success fill">
+                       <span *ngIf="!updating">
+                         Salvar
+                       </span>
+                       <app-loader *ngIf="updating" [type]="'inner'"></app-loader>
+                     </button>
+                    </div>                                  
+                  </div>
+              </ng-template>
+            </ngb-tab>
+            <ngb-tab> 
+              <ng-template ngbTabTitle>
+                <h4>Interesses
+                </h4>
+              </ng-template>
+              <ng-template ngbTabContent>
+                <div class="row m-b-30">
+                    <div class="col-md-12">
+                        <label for="manufacturer">Selecione os itens de sua preferência para uma experiência mais personalizada na plataforma</label>
+                        <li *ngFor="let item of user.Interesses">{{item.NomeInteresse}} <i class="fa fa-close" (click)="removeInteresse(item.IdInteresse)"></i></li>
+                        <ng-select class="form-control" #select
+                              [items]="categorias | async"
+                              [multiple]="true"
+                              [closeOnSelect]="false"
+                              [searchable]="true"
+                              bindLabel= "NomeInteresse"
+                              bindValue="IdInteresse"
+                              [(ngModel)]="empresa.Interesses"
+                              [ngModelOptions]="{standalone: true}"
+                              (add)="addInteresses($event)"
+                              (remove)="removeInteresse($event)">
+                              
+                      </ng-select>
+                    </div>                 
+                </div>
+                <div class="row">
+                    <div class="form-group col-md-2 offset-md-10">
+                     <button *ngIf="!edit" (click)="edit = true" class="btn btn-info pull-right fill">Editar</button>
+                    </div> 
+                    <div class="form-group col-md-2 offset-md-8">
+                        <button *ngIf="edit" (click)="edit = false" class="btn btn-default fill">
+                          Cancelar
+                        </button> 
+                       </div> 
+                    <div class="form-group col-md-2 ">
+                     <button *ngIf="edit" (click)="update()" class="btn btn-success fill">
+                       <span *ngIf="!updating">
+                         Salvar
+                       </span>
+                       <app-loader *ngIf="updating" [type]="'inner'"></app-loader>
+                     </button>
+                    </div>                                  
+                  </div>
+              </ng-template>
+            </ngb-tab>
+        </ngb-tabset>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-body">
+        <div class="card-title">
+          <div class=" d-flex justify-content-between">
+            <h4>
+              Filiais
+
+            </h4>
+            <button (click)="openCreateModal(empresa)" class="btn btn-success">
+              Adicionar
+            </button>
+          </div>
+          <app-loader *ngIf="loading_filiais"></app-loader>
+          <div *ngIf="!loading_filiais" class="container-fluid">
+            <div class="wrapper d-flex align-items-center py-2 border-bottom" *ngFor="let filial of filiais">
+              <div class="wrapper ml-3">
+                <h6 [routerLink]="['/empresas/', filial.IdEmpresa]" class="mb-0 empresa-name">
+                  <strong>{{filial.RazaoSocial}}</strong>
+                </h6>
+                <small class="text-muted mb-0">{{filial.Cnpj}}</small>
+                <small class="text-muted mb-0">{{filial.StatusEmpresa ? 'Ativa' : 'Inativa'}}</small>
+              </div>
+              <div class=" ml-auto px-1 py-1">
+                <div [routerLink]="['/empresas/', filial.IdEmpresa]" title="Editar Empresa" class="badge badge-pill edit-empresa badge-primary">
+                  <i class="fa fa-edit"></i>
+                </div>
+
+                <div title="Remover Empresa" (click)="openRemoveModal(filial)" class="badge badge-pill badge-danger remove-filial">
+                  <i class="fa  fa-trash-o"></i>
+                </div>
+              </div>
+            </div>
+            <div *ngIf="filiais.length < 1" class="d-flex">
+              <h5>Essa empresa ainda não possui filiais cadastradas no sistema.</h5>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

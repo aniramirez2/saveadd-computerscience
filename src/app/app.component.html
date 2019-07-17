@@ -1,0 +1,17 @@
+<div class="container-scroller">
+  <app-navbar *ngIf="auth.isAuthenticated()"></app-navbar>
+  <div class="container-fluid page-body-wrapper">
+    <app-sidebar *ngIf="auth.isAuthenticated()"></app-sidebar>
+    <div class="main-panel" [ngClass]="{'larger': onLoginOrRegister()}">
+      <div class="content-wrapper">
+        <router-outlet></router-outlet>
+        <!--ngx-tawk id="5ba2ca35c9abba579677b6f8"></ngx-tawk-->
+      </div>
+      <app-footer></app-footer>
+    </div>
+  </div>
+</div>
+<!--
+<div *ngIf="notLoggedIn">
+  <app-login>Loading...</app-login>
+</div> -->

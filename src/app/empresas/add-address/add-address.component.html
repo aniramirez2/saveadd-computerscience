@@ -1,0 +1,100 @@
+<div class="row">
+  <div class="col-lg-12">
+    <div class="card">
+      <div class="card-body">
+        <h4 class="card-title">Adicionar Endereço</h4>
+
+        <div class="wrapper align-items-center container">
+          <form #addAddress="ngForm" class="row">
+            <div class="form-group col-sm-6">
+              <label>Tipo</label>
+              <select  class="form-control" [ngModel]="address.TipoEndereco" (change)="addTipoEndereco($event.target.value)"  [ngModelOptions]="{standalone: true}">
+                <option *ngFor="let prf of allProfiles" [ngValue]="prf.Id" >
+                    {{ prf.Nome }}
+                </option>
+              </select> 
+            </div>
+            <div class="form-group col-sm-6">
+                <label>Nome</label>
+              <input class="form-control" required name="nome" [(ngModel)]="address.NomeEndereco" >
+            </div>
+            <div class="form-group col-sm-6">
+              <label>CEP</label>
+              <input class="form-control" required name="raz-social" [(ngModel)]="cep" (ngModelChange)="findAddress()">
+            </div>
+            <div class="form-group col-sm-6">
+              <label>Logradouro</label>
+              <input class="form-control" required name="logradouro" [(ngModel)]="address.Logradouro">
+            </div>
+            <div class="form-group col-sm-6">
+                <label>Número</label>
+                <input class="form-control" required name="numero" [(ngModel)]="address.Numero">
+              </div>
+            <div class="form-group col-sm-6">
+              <label>Bairro</label>
+              <input class="form-control" required name="bairro" [(ngModel)]="address.Bairro">
+            </div>
+            <div class="form-group col-sm-6">
+              <label>Complemento</label>
+              <input class="form-control" name="complemento" [(ngModel)]="address.Complemento">
+            </div>          
+            
+            <div class="form-group col-sm-6">
+              <label>Cidade</label>
+              <input class="form-control" required name="cidade" [(ngModel)]="address.Cidade">
+            </div>
+            <div class="form-group col-sm-6">
+              <label>Estado</label>
+              <select #t  name="estado" class="form-control" [ngModel]="address.Estado"  (change)="selectState(t.value)">
+                <option disabled selected  [value]="address.Estado"></option>
+                <option  *ngFor="let es of estados" [ngValue]="es.IdEstado">
+                  {{es.NomeEstado}}
+                </option>
+              </select>
+            </div>                
+                <!--div class="form-group col-md-12">
+                  <p class=" form-check form-group form-check-inline">
+                  <input  [checked]="address.RealizaEntrega == 1" (change)="address.RealizaEntrega = address.RealizaEntrega == 1? 0: 1"
+                    type="checkbox" class="form-check-input" id="entrega" name="entrega">
+                  <label class="form-check-label" for="entrega" style="float: left;">Realiza entrega</label>
+                </p>
+                  <div *ngIf="address.RealizaEntrega == 1">
+                    <div class="form-group ">
+                      <label>Regras de entrega</label>
+                      <input class="form-control" name="regrasEntrega" [(ngModel)]="address.RegraEntrega">
+                    </div>
+                  </div>
+                </div-->
+                <!--div class="form-group col-md-12">
+                  <p class=" form-check form-group form-check-inline">
+                    <input  [checked]="address.PermiteRetirada == 1" (change)="address.PermiteRetirada == 1? 0: 1"
+                      type="checkbox" class="form-check-input" id="recebe" name="recebe">
+                    <label class="form-check-label" for="recebe" style="float: left;">Aceita retirada</label>
+                  </p>
+                  <div *ngIf="address.PermiteRetirada == 1">
+                    <div class="form-group ">
+                      <label>Regras de retirada</label>
+                      <input class="form-control"  name="regrasRetirada" [(ngModel)]="address.RegraRetirada">
+                    </div>
+                  </div>
+                </div-->
+          </form>
+          <div class="row">
+              <div class="col-sm-3 offset-md-6">
+                  <button (click)="activeModal.close({'updated': updated, 'empresa': empresa})" type="button" class="btn btn-light float-right"><span>Fechar</span></button>
+                </div>
+            <div class="col-sm-3">
+              <button (click)="update()" [disabled]="updating || !addAddress.form.valid" class="btn btn-success">
+                <span *ngIf="!updating">
+                  Salvar
+                </span>
+                <app-loader *ngIf="updating" [type]="'inner'"></app-loader>
+              </button>
+            </div>
+            
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

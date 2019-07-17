@@ -1,0 +1,259 @@
+<div class="row">
+  <div class="col-lg-12 grid-margin stretch-card">
+    <div class="card">
+      <div class="card-body">
+        <h4 class="card-title">Novo Anúncio</h4>
+        <ngb-alert *ngIf="successMessage" type="success" (close)="successMessage = null">{{ successMessage }}
+        </ngb-alert>
+        <ngb-alert *ngIf="errorMessage" type="danger" (close)="errorMessage = null">{{ errorMessage }}</ngb-alert>
+        <form #adForm="ngForm" id="example-form" action="#">
+          <div class="form-group col-sm-12">
+            <label>
+              <strong>
+                Tipo de anúncio
+              </strong>
+            </label>
+
+            <div class="input-group">
+              <div class=" form-check-inline">
+                <input [checked]="ad.type == 1" class="form-check-input" type="radio" name="sale" id="sale" [(ngModel)]="ad.type" [value]="1">
+                <label class="form-check-label" for="sale">Venda</label>
+              </div>
+              <!--div class=" form-check-inline">
+                <input required class="form-check-input" type="radio" name="donation" id="donation" [(ngModel)]="ad.type" [value]="2">
+                <label class="form-check-label" for="donation">Doação</label>
+              </div-->
+            </div>
+          </div>
+          <div *ngIf="ad.type" class="row">
+            <div class="form-group col-sm-4">
+              <label>
+                Categoria
+              </label>
+              <select required [disabled]="onlyCategories == null" name="categoria" [(ngModel)]="category"
+                class="form-control" (change)="selectedCategory($event.target)">
+                <option *ngFor='let sub of onlyCategories' [value]="sub.IdCategoria">
+                  {{sub.NomeCategoria}}
+                </option>
+              </select>
+            </div>
+            <div class='col-md-4 form-input'>
+              <div class="form-group">
+                <label for="code-type">Subcategoria</label>
+
+                <select required [disabled]="subcategories == null" name="subcategoria" class="form-control" #s  (click)="onChangeSubcategroy($event.target)">
+                  <option disabled>Por favor selecione uma subcategoria</option>
+                  <option *ngFor='let sub of subcategories' [value]="sub.IdCategoria">
+                    {{sub.NomeCategoria}}
+                  </option>
+                </select>
+              </div>
+            </div>
+
+            <div class="form-group col-sm-4">
+              <label>
+                Produto
+              </label>
+              <div class="input-group mb-3">
+
+                <select [disabled]="!isCatSelected" name="product" id="product" class="form-control" #p
+                  (change)="selectedProduct(p.value)">
+                  <option *ngIf="produtosCategoria.length == 0">Ainda não existem produtos cadastrados com esta
+                    subcategoria</option>
+                  <option *ngIf="produtosCategoria.length != 0">Selecione um produto</option>
+                  <option *ngFor='let prod of produtosCategoria' [value]="prod.IdProduto">
+                    {{prod.NomeProduto}}
+                  </option>
+                </select>
+              </div>
+              <app-loader *ngIf="searching" [type]="'inner'"></app-loader>
+
+            </div>
+            <div class="form-group col-sm-12">
+            <div class="row">
+              <div class="form-input col-sm-3" >
+                <label for="qtd_estoque">Qtd. Estoque</label>
+                <input  id="qtd_estoque" type="number" [disabled]="!selectedProd" min="0" required [(ngModel)]="adProduct.QuantidadeEstoque" name="qtd_estoque" class="form-control" placeholder="Qtd. Estoque">
+              </div>
+
+              <div class='col-md-3 form-input'>
+                <!-- <label>Unidade </label> -->
+                <label for="unidade">Unidade</label>
+                <select id="unidade" name="unidade" [disabled]="!selectedProd" class="form-control"
+                  [(ngModel)]="adProduct.Unidade">
+                  <option [ngValue]="null" disabled>
+                    <strong>
+                      Tipo de unidade
+                    </strong>
+                  </option>
+                  <option *ngFor='let unidade of unidades' [ngValue]="unidade">
+                    {{unidade}}
+                  </option>
+                </select>
+              </div>
+              <div class="form-input col-sm-3">
+                <label for="valor-original">Valor Original</label>
+                <input id="valor-original" currencyMask [disabled]="!selectedProd" [options]="{ prefix: '', thousands: '.', decimal: ',' }" type="text" [(ngModel)]="adProduct.ValorUnitarioOriginal" name="valor-original" class="form-control"
+                  placeholder="Valor Unitario Original">
+              </div>
+              <div class="form-input col-sm-3">
+                <label for="valor-desconto">Valor final com desconto</label>
+                <input id="valor-desconto" currencyMask [disabled]="!selectedProd" [options]="{ prefix: '', thousands: '.', decimal: ',' }" type="text" [(ngModel)]="adProduct.ValorUnitarioDesconto" name="valor-desconto" class="form-control"
+                  placeholder="Valor Unitario Final">
+              </div>
+            </div>
+          </div>    
+          <div class="form-group col-sm-12" *ngIf="adProduct.IdProduto">
+              <div class="row">
+                <div class="form-group col-sm-6">
+                  <label for="ad-title">Titulo</label>
+                  <input id="ad-title" required [(ngModel)]="ad.title" name="ad-title" class="form-control"
+                    placeholder="Título">
+                </div>
+                <div class="form-group col-sm-6">
+                  <label for="ad-description">Descrição</label>
+                  <input id="ad-description" required [(ngModel)]="ad.description" name="ad-description"
+                    class="form-control" placeholder="Descrição">
+                </div>
+
+                <div class="form-group col-sm-6">
+                  <label for="ad-start-date">Data Início</label>
+                  <input id="ad-start-date" type="date" required [(ngModel)]="ad.start_date" name="ad-start-date"
+                    class="form-control" placeholder="dd-mm-yyyy">
+                </div>
+                <div class="form-group col-sm-6">
+                  <label for="ad-end-date">Data Fim</label>
+                  <input id="ad-end-date" type="date" required [(ngModel)]="ad.end_date" name="ad-end-date"
+                    class="form-control" placeholder="dd-mm-yyyy">
+                </div>
+              </div>
+            </div>
+
+            <div class="form-group col-sm-12" *ngIf="adProduct.IdProduto">
+              <label>
+                <strong>Restrições</strong>
+
+              </label>
+
+              <div class="row justify-content-start">
+                <div class="form-group col-sm-3">
+                  <label for="restricao">Tipo restriçao</label>
+                  <select id="restricao" class="form-control" [ngModelOptions]="{standalone: true}" [(ngModel)]="restricao.TpRestricao" (change)="onChangeRest($event)">
+                    <option *ngFor='let rest of tipoRestricoes' [ngValue]="rest" >
+                      {{rest.Descricao}}
+                    </option>
+                  </select>
+                </div>
+
+                <div class="form-group col-sm-3">
+                  <label for="valorrest">Valor restrição</label>
+                  <input id="valorrest" *ngIf="selectedRest != 3 && selectedRest != 4  && selectedRest != 2 && selectedRest != 5" [(ngModel)]="restricao.Valor" name="valor-restricao" class="form-control" placeholder="Valor">
+                  <select id="valorrest"  *ngIf="selectedRest == 3" name="restricao.Valor" class="form-control" [(ngModel)]="restricao.Valor">
+                    <option *ngFor='let estado of estados' [ngValue]="estado.IdEstado" >
+                      {{estado.NomeEstado}}
+                    </option>
+                  </select>
+                  <input *ngIf="selectedRest == 4 || selectedRest == 5  "  class="form-control"  value="sim" disabled>
+                  <input *ngIf="selectedRest == 2 "[textMask]="{mask: masks.cnpj}" [(ngModel)]="restricao.Valor" class="form-control input-md" name="cnpj" type="text"
+                      placeholder="CNPJ">
+                </div>
+                <div class=" form-group col-sm-3 mt-label">
+                  <button (click)="addRescricao()" class="btn btn-success" [disabled]="restricao.TipoRestricao == null">Adicionar</button>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-lg-12 mb-3"></div>
+              </div>
+              <div class="row">
+                <div class="form-group col-sm-9">
+                  <table id="order-listing" class="table">
+                    <thead>
+                      <tr class="bg-primary text-white">
+                        <th>Código</th>
+                        <th>Tipo Restrição</th>
+                        <th>Valor</th>
+                        <th>Ação</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr *ngFor="let restricao of restricoes; let i = index" [attr.data-index]="i">
+                        <td>{{restricao.TpRestricao.Id}}</td>
+                        <td>{{restricao.TpRestricao.Descricao}}</td>
+                        <td *ngIf="restricao.TpRestricao.Id != 4">{{restricao.Valor}}</td>
+                        <td *ngIf="restricao.TpRestricao.Id == 4">{{ NomeEstado}}</td>
+                        <td>
+                          <button class="btn btn-light" (click)="excluirRest(restricao, i)">
+                            <i class="mdi mdi-eye text-primary"></i>Excluir
+                          </button>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+            <div class="form-group col-sm-12" *ngIf="adProduct.IdProduto">
+              <label>
+                <strong>Lotes</strong>
+
+              </label>
+              <div class="row">
+                <div class="form-group col-sm-3">
+                  <label>Número do Lote</label>
+                  <input [(ngModel)]="lote.NumeroLote" name="ad-lote" class="form-control" placeholder="Lote">
+                </div>
+
+              <div class="form-group col-sm-3">
+                <label>Data de Validade</label>
+                <input type="date"  [(ngModel)]="lote.DataVencimento" name="ad-valid-date" class="form-control" placeholder="dd-mm-yyyy">
+              </div>
+              <div class=" form-group col-sm-3 mt-label">
+                <button (click)="addLote()" class="btn btn-success" [disabled]="lote.DataVencimento == undefinded">Adicionar</button>
+            </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12 mb-3"></div>
+              </div>
+              <div class="row">
+                <div class="form-group col-sm-9">
+                  <table id="order-listing" class="table">
+                    <thead>
+                      <tr class="bg-primary text-white">
+                        <th>IdLote</th>
+                        <th>Lote</th>
+                        <th>Data Validade</th>
+                        <th>Ação</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr *ngFor="let lote of lotes; let i = index" [attr.data-index]="i">
+                        <td>{{ lote.IdLote}}</td>
+                        <td>{{ lote.NumeroLote}}</td>
+                        <td> {{ lote.DataVencimento }} </td>
+                        <td>
+                          <button class="btn btn-light" (click)="removeLote(lote, i)">
+                            <i class="mdi mdi-eye text-primary"></i>Excluir
+                          </button>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="form-group col-sm-6">
+            <!-- Docs https://aberezkin.github.io/ng2-image-upload/#/demo -->
+            <!-- <image-upload buttonCaption="Adicionar Imagens" dropBoxMessage="Arraste para cá" clearButtonCaption="Limpar" (removed)="onRemoved($event)"
+              (uploadFinished)="onUploadFinished($event)" (uploadStateChanged)="onUploadStateChanged($event)"></image-upload> -->
+          </div>
+          <div class="form-group col-sm-1 offset-sm-11">
+            <button (click)="saveAd()" [disabled]="adForm.invalid && isCatSelected == false" class="btn btn-success">
+              Salvar
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

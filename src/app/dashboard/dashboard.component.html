@@ -1,0 +1,129 @@
+<div class="row">
+  <div class="col-md-3 grid-margin stretch-card">
+    <div class="card card-produtos">
+      <div class="card-body">
+        <div class="d-flex flex-row">
+            <i class="icon-handbag icon"></i>
+            <div class="info">
+              <span></span>
+              <p>produtos cadastrados</p>
+
+              <div class="link" routerLink="/produtos">
+                Ver todos <i class="icon-arrow-right"></i> 
+              </div>
+            </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-3 grid-margin stretch-card">
+    <div class="card card-anuncios">
+      <div class="card-body">
+        <div class="d-flex flex-row">            
+            <i class="icon-bag icon"></i>
+            <div class="info">
+                <span></span>
+                <p>anúncios cadastrados</p>
+  
+                <div class="link" routerLink="/anuncios">
+                  Ver todos <i class="icon-arrow-right"></i> 
+                </div>
+              </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-3 grid-margin stretch-card">
+    <div class="card card-pedidos">
+      <div class="card-body">
+        <div class="d-flex flex-row">
+          <i class="icon-basket-loaded icon"></i>            
+          <div class="info">
+              <span></span>
+              <p>pedidos cadastrados</p>
+
+              <div class="link" routerLink="/pedidos">
+                Ver todos <i class="icon-arrow-right"></i> 
+              </div>
+            </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-3 grid-margin stretch-card">
+    <div class="card card-vendas">
+      <div class="card-body">
+        <div class="d-flex flex-row">
+          <i class="icon-tag icon"></i>    
+          <div class="info">
+              <span></span>
+              <p>venda(s) cadastrada(s)</p>
+
+              <div class="link" routerLink="/vendas">
+                Ver todos <i class="icon-arrow-right"></i> 
+              </div>
+            </div>        
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- <div class="row">
+  <div class="col-lg-12 grid-margin">
+    <div class="card">
+      <div class="card-body">
+        <div class="row">
+          <div class="col-lg-12 grid-margin">
+            <div class="card">
+              <div class="card-body">
+                <h4 class="card-title">Meus Pedidos</h4>
+                <div class="row">
+                  <div class="col-12">
+                    <table id="order-listing" class="table">
+                      <thead>
+                        <tr class="bg-primary text-white">
+                          <th class="sortable-table">Número do Pedido</th>
+                          <th>Data</th>
+                          <th>Valor</th>
+                          <th>Forma de Pagamento</th>
+                          <th>Status</th>
+                          <th>Ação</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr *ngFor="let pedido of pedidos">
+                          <td> {{pedido.IdPedido}}</td>
+                          <td>{{pedido.DataInclusao | date: 'dd/MM/yyy'}}</td>
+                          <td>R$ {{getTotal(pedido)}}</td>
+                          <td>{{getFormaPagamento(pedido.FormaPagamento)}}</td>
+                          <td>
+                            <label class="badge badge-success">Ativo</label>
+                          </td>
+                          <td>
+                            <button class="btn btn-light">
+                              <i class="mdi mdi-eye text-primary"></i>Mais Detalhes
+                            </button>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+                <div class="container" *ngIf="pedidos.length < 1">
+                  <div class="row">
+                    <div class="col-sm-12">
+                      <h3>Você não possui pedidos</h3>
+                    </div>
+                  </div>
+                </div>
+        
+              </div>
+            </div>
+          </div>
+        </div>
+        
+      </div>
+    </div>
+  </div>
+</div>
+-->

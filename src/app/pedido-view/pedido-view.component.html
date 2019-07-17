@@ -1,0 +1,102 @@
+<ngx-spinner 
+bdColor="rgba(51,51,51,0.8)"
+size="large"
+color="#00a99d"
+type="line-scale">
+<p style="font-size: 20px; color: #00a99d">Carregando...</p>
+</ngx-spinner>
+<div class="row">
+  <div class="col-lg-12 grid-margin">
+    <div class="card">
+      <div class="card-body info" *ngIf="pedido != undefined">
+        <h5 class="card-title">Dados do pedido</h5>
+        <p><span>Número do pedido: </span> {{pedido.NumeroPedido}}</p>
+        <p><span>Data e Hora: </span> {{dataPedido | date: 'dd/MM/yyy '}} {{horaPedido}}</p>
+        <p><span>Valor Total:</span> {{getTotal(pedido) | currency:'BRL':true }}</p>
+        <p><span>Forma de pagamento: </span> {{getFormaPagamento(pedido.FormaPagamento)}}</p>
+        <p><span>Observações: </span> {{pedido.Observacoes}}</p>
+        <p><span>Status do pedido: </span> {{statusPedido}}</p>
+        <p><span>E-mail para NFE: </span> {{pedido.Fornecedor.EmailFiscal}}</p>
+        <div class="row">
+          <div class="form-group" class="mt">
+              <p><span>Observações sobre o cancelamento:</span></p>
+              <textarea maxlength="500" [disabled]="statusPedidoSelecionado == 5" [(ngModel)]="observacoescancelamento" class="form-control" rows="5" id="comment"></textarea>
+          </div>
+          <div class="col-md-12">            
+            <div class="row d-flex justify-content-between">
+              <div class="container">
+                    <button (click)="cancelarPedido()" [disabled]="statusPedidoSelecionado == 5 " class="btn btn-danger btn-sm mt-3 mb-4">Cancelar pedido</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-lg-12 grid-margin">
+    <div class="card">
+      <div class="card-body info">
+        <table id="order-listing" class="table">
+          <thead>
+            <tr class="bg-primary text-white">
+              <th >Código do Produto</th>
+              <th>Nome Produto</th>
+              <th>Quantidade</th>
+              <th>Valor Unitário</th>
+              <th>Total</th>
+            </tr>
+          </thead>
+          <tbody *ngIf=" pedido != undefined">
+            <tr *ngFor="let itens of pedido.Itens">
+              <td *ngIf=" itens.infoProduct != undefined" > {{ itens.infoProduct.CodigoBarras[0].TipoCodigoBarras | codigos }} - {{itens.infoProduct.CodigoBarras[0].Codigo}}</td>
+              <td *ngIf=" itens.infoProduct != undefined"> {{itens.infoProduct.NomeProduto}}</td>
+              <td> {{ itens.Quantidade }}</td>
+              <td> {{ itens.ValorDesconto | currency:'BRL':true }} </td>
+              <td> {{getTotalProduto(itens) | currency:'BRL':true }}</td>
+            </tr>
+          </tbody>
+        </table>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-12 grid-margin">
+      <div class="card">
+        <div class="card-body info">
+          <h5 class="card-title">Empresa Fornecedora</h5>
+          <p><span>Empresa: </span> {{empresaCompradora.NomeEmpresa}}</p>
+          <p><span>Razão Social: </span> {{empresaCompradora.RazaoSocial}}</p>
+          <p><span>CNPJ: </span> {{empresaCompradora.Cnpj}}</p>
+          <p><span>Inscrição Estadual: </span>{{empresaCompradora.InscricaoEstadual ? empresaCompradora.InscricaoEstadual : 'Isento' }}</p>
+
+
+          <div *ngIf="Enderecos" >
+            <div  *ngFor="let endereco of empresaCompradora.Enderecos">
+
+              <h6 class="card-title">{{endereco.NomeEndereco ? endereco.NomeEndereco : 'Endereços'}}</h6>
+                <p><span>Logradouro: </span>{{endereco.Logradouro}}</p>
+                <p><span>Número: </span>{{endereco.Numero}}</p>  
+                <p><span>Complemento: </span>{{endereco.Complemento}}</p>
+                <p><span>CEP: </span>{{endereco.Cep}}</p>
+                <p><span>Bairro: </span>{{endereco.Bairro}}</p>
+                <p><span>Cidade: </span>{{endereco.Cidade}}</p>
+                <p><span>Estado: </span>{{endereco.Estado}}</p>
+            </div>
+          </div>
+
+          <!--  <div *ngFor="let telefone of empresaCompradora.Telefones">
+              <h6 class="card-title">{{telefone.NomeTelefone ? telefone.NomeTelefone : 'Telefone de contato'}}</h6>
+              <p><span>Número: </span>({{telefone.Area}}) - {{telefone.Numero}}</p>
+              <p><span>Ramal: </span>{{telefone.Ramal}}</p>
+            </div> -->
+        </div>
+      </div>
+    </div>
+  </div>

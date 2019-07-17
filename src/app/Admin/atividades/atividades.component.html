@@ -1,0 +1,57 @@
+<ngx-spinner 
+bdColor="rgba(51,51,51,0.8)"
+size="large"
+color="#00a99d"
+type="line-scale">
+<p style="font-size: 20px; color: #00a99d">Carregando...</p>
+</ngx-spinner>
+<div class="row">
+  <div class="col-lg-12 grid-margin">
+    <div class="card">
+      <div class="card-body">
+        <h4 class="card-title">Atividades</h4>
+        
+        <div class="row">
+          <div class="col-12">
+              
+             <table id="order-listing" class="table">
+              <thead>
+                <tr class="bg-primary text-white">
+                  <th>Id</th>
+                  <th>Tipo</th>
+                  <th>Tabela</th>
+                  <th>Dados</th>
+                  <th>Resultado</th>
+                  <th>IP Origem</th>
+                  <th>DataInclusao</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let erro of erros">
+                  
+                  <td> {{ erro.IdLogAtividade }} </td>
+                  <td> {{ nomeAtividade(erro.TipoAtividade) }} </td>
+                  <td colspan="1" style="max-width:80px; overflow:auto"> {{ erro.Tabela }} </td>
+                  <td  style="max-width:200px; overflow:auto"> {{ erro.Dados }} </td>
+                  <td style="max-width:80px; overflow:auto"> {{ erro.Resultado }} </td>
+                  <td> {{ erro.IPOrigem }} </td>
+                  <td>{{erro.DataInclusao  | date: 'dd/MM/yyy' }}</td>
+                </tr>                
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div class="container" *ngIf="erros != undefined">
+          <div class="row">
+            <div class="col-sm-12">
+              <h3>Não há erros no momento</h3>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+

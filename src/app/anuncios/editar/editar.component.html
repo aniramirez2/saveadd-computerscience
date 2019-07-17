@@ -1,0 +1,370 @@
+<div class="row">
+  <div class="col-lg-12 grid-margin">
+    <!--button routerLink="/anuncios" class="btn btn-default return">Voltar</button-->
+    <div class="card grid-margin">
+      <div class="card-body">
+        <h4 class="card-title">Editar Anuncios</h4>
+        <ngb-alert *ngIf="successMessage" type="success" (close)="successMessage = null">{{ successMessage }}</ngb-alert>
+        <ngb-alert *ngIf="errorMessage" type="danger" (close)="errorMessage = null">{{ errorMessage }}</ngb-alert>
+        <app-loader *ngIf="loading_page"></app-loader>
+        <ngb-tabset class="tab-basic" *ngIf="!loading_page">
+          <ngb-tab>
+            <ng-template ngbTabTitle>
+              <h4>Detalhes do Anuncio
+              </h4>
+            </ng-template>
+            <ng-template ngbTabContent>
+              <form #editAnuncio class="row">
+                <div class="form-group col-sm-6">
+                  <label>Titulo</label>
+                  <input class="form-control" [disabled]="!edit" name="titulo" [ngModel]="anuncio?.Titulo" (ngModelChange)="anuncio.Titulo = $event">
+                </div>
+                <div class="form-group col-sm-12">
+                  <label>Descrição</label>
+                  <textarea class="form-control" [disabled]="!edit" name="descricao" [(ngModel)]="anuncio.Descricao" (ngModelChange)="anuncio.Descricao = $event"
+                    rows="3"></textarea>
+                </div>
+                
+                <div class="form-group col-sm-6">
+                  <label>Data Início</label>
+                  <input type="date" [disabled]="!edit" required (ngModelChange)="anuncio.DataInicio=$event" [ngModel]="anuncio.DataInicio | date:'yyyy-MM-dd'"
+                    name="ad-start-date" class="form-control" placeholder="yyyy-mm-dd">
+                </div>
+                <div class="form-group col-sm-6">
+                  <label>Data Fim</label>
+                  <input type="date" [disabled]="!edit" required (ngModelChange)="anuncio.DataFim=$event" [ngModel]="anuncio.DataFim | date:'yyyy-MM-dd'"
+                    name="ad-end-date" class="form-control" placeholder="yyyy-mm-dd">
+                </div>
+                <div class='col-md-6 form-group '>
+                  <div class="form-group" *ngIf='auxCategoria != null'>
+                    <label for="cat">Categoria</label>    
+                    <select  disabled="true"  name="cat" class="form-control" [ngModel]="auxCategoria.IdCategoria"  #t (change)="onChangeCategory(t.value ,$event)">
+                      <option selected  [value]="auxCategoria.IdCategoria" disabled>{{auxCategoria.NomeCategoria}}</option>
+                      <option *ngFor='let sub of onlyCategories' [ngValue]="sub.IdCategoria">
+                        {{sub.NomeCategoria}}
+                      </option>
+                    </select>
+                  </div>
+                </div><div class='col-md-6 form-group '>
+                  <div class="form-group" *ngIf='auxSubCategoria != null' >
+                    <label for="subc">Subcategoria</label>    
+                    <select  disabled="true" name="subc" class="form-control" [ngModel]="auxSubCategoria.IdCategoria"  #o  (change)="onChangeSubcategory(o.value,$event)">
+                      <option selected [value]="auxSubCategoria.IdCategoria"  disabled>{{auxSubCategoria.NomeCategoria}}</option>
+                      <option *ngFor='let subc of subcategories' [ngValue]="subc.IdCategoria">
+                        {{subc.NomeCategoria}}
+                      </option>
+                    </select>
+                  </div>
+                </div>
+                <div class="form-group col-sm-6">
+                  <label>Qtd. Estoque</label>
+                  <input [disabled]="!edit" type="number" min="0" required [(ngModel)]="anuncio.Produtos[0].QuantidadeEstoque" name="qtd_estoque"
+                    class="form-control" placeholder="Qtd. Estoque">
+                </div>
+
+                <div class='col-md-6 form-group'>
+                  <label>Tipo de unidade</label>
+                  <select [disabled]="!edit" name="unidade" class="form-control" [(ngModel)]="anuncio.Produtos[0].Unidade">
+                    <option [ngValue]="null" disabled>
+                      <strong>
+                        Tipo de unidade
+                      </strong>
+                    </option>
+                    <option *ngFor='let unidade of unidades' [ngValue]="unidade">
+                      {{unidade}}
+                    </option>
+                  </select>
+                </div>
+
+                <div class="form-group col-sm-6">
+                  <label>Valor Unitario Original</label>
+                  <!-- [textMask]="{mask: createNumberMask}"-->
+                  <input currencyMask [options]="{ prefix: '', thousands: '.', decimal: ',' }" [disabled]="!edit" type="text" required [(ngModel)]="preco" name="valor-original"
+                    class="form-control" placeholder="Valor Unitario Original">
+                </div>
+                <div class="form-group col-sm-6">
+                  <label>Valor Unitario Final</label>
+                  <input currencyMask  [options]="{ prefix: '', thousands: '.', decimal: ',' }" [disabled]="!edit" type="text"  required [(ngModel)]="desconto" name="valor-desconto"
+                    class="form-control" placeholder="Valor Unitario Final">
+                </div>
+
+              </form>
+
+              <div class="form-group row">
+                <div class="col-md-2 offset-10">
+                  <button *ngIf="!edit" (click)="edit = true" class="btn btn-info pull-rigth fill">Editar</button>
+                </div>
+                <div class="col-md-2 offset-8">
+                    <button *ngIf="edit" (click)="edit = false" class="btn btn-default fill">
+                      Cancelar
+                    </button>
+                  </div>
+                <div class="col-md-2 ">
+                  <button *ngIf="edit" (click)="update()" class="btn btn-success fill">
+                    <span *ngIf="!updating">
+                      Salvar
+                    </span>
+                    <app-loader *ngIf="updating" [type]="'inner'"></app-loader>
+                  </button>
+                </div>
+                
+              </div>
+            </ng-template>
+          </ngb-tab>
+
+          <ngb-tab>
+            <ng-template ngbTabTitle>
+              <h4>
+                Restrições
+              </h4>
+            </ng-template>
+            <ng-template ngbTabContent>
+              <form #editAnuncio>
+                <div class="row mt-3" >                    
+                    <div class="form-group col-sm-4" >
+                      <label>Tipo Restrição</label>
+                      <select [disabled]="!edit" name="trestricao" #t class="form-control" [(ngModel)]="restricao.TipoRestricao"  (ngModelChange)="onChangeRestr(t.value)">                        
+                        <option *ngFor='let rest of tipoRestricoes' [ngValue]="rest.Id"  >
+                          {{rest.Descricao}}
+                        </option>
+                      </select>
+                    </div>
+                    <div class="form-group col-sm-4" >
+                      <label>Valor Restrição</label>
+                      <input [disabled]="!edit"  *ngIf="selectedRest != 4 && selectedRest != 3  && selectedRest != 6 && selectedRest != 7" required [(ngModel)]="restricao.Valor" name="valor-restricao" class="form-control" placeholder="Valor">
+                      <select [disabled]="!edit" *ngIf="selectedRest == 4" name="restricao" class="form-control" [(ngModel)]="restricao.Valor">
+                        <option *ngFor='let estado of estados' [ngValue]="estado.IdEstado" >
+                          {{estado.NomeEstado}}
+                        </option>
+                      </select>
+                      <input [disabled]="!edit" *ngIf="selectedRest == 6 || selectedRest == 7 "  class="form-control"  value="sim" disabled>
+                      <input [disabled]="!edit" *ngIf="selectedRest == 3 "[textMask]="{mask: masks.cnpj}" [(ngModel)]="restricao.Valor" class="form-control input-md" name="cnpj" type="text"
+                      placeholder="CNPJ">
+                    </div>
+                    <div class="form-group col-sm-4">                      
+                      <button [disabled]="!edit" (click)="addRescricao()" class="btn btn-success pull-rigth">Adicionar</button>
+                    </div>
+                  </div>
+                  <div class="row">
+                      <div class="form-group col-sm-12">
+                        <table id="order-listing" class="table">
+                          <thead>
+                            <tr class="bg-primary text-white">
+                             
+                              <th>Tipo Restrição</th>
+                              <th>Valor</th>
+                              <th>Ação</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <tr *ngFor="let restri of anuncio.Restricoes; let i = index" [attr.data-index]="i">
+                              <td>{{restri.TipoRestricao | tipo}}</td>
+                              <td *ngIf="restri.TipoRestricao != 4">{{restri.Valor}}</td>
+                              <td *ngIf="restri.TipoRestricao == 4">{{ NomeEstado}}</td>
+                              <td>
+                                <button [disabled]="!edit" class="btn btn-light" (click)="excluirRest(restri, i)">
+                                  <i class="mdi mdi-eye text-primary"></i>Excluir
+                                </button>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                   </div>
+                <div class="row" *ngIf="(anuncio.Restricoes.length < 1 && !edit)">
+                  <h3>Sem restrições para este produto</h3>
+                </div>
+              </form>
+              <div class="form-group row">
+                  <div class="col-md-2 offset-10">
+                    <button *ngIf="!edit" (click)="edit = true" class="btn btn-info pull-rigth fill">Editar</button>
+                  </div>
+                  <div class="col-md-2 offset-8">
+                      <button *ngIf="edit" (click)="edit = false" class="btn btn-default fill">
+                        Cancelar
+                      </button>
+                    </div>
+                  <div class="col-md-2 ">
+                    <button *ngIf="edit" (click)="update()" class="btn btn-success fill">
+                      <span *ngIf="!updating">
+                        Salvar
+                      </span>
+                      <app-loader *ngIf="updating" [type]="'inner'"></app-loader>
+                    </button>
+                  </div>
+                  
+                </div>
+            </ng-template>
+          </ngb-tab>
+          <ngb-tab>
+            <ng-template ngbTabTitle>
+              <h4>
+                Lotes
+              </h4>
+            </ng-template>
+            <ng-template ngbTabContent>
+              <form #editAnuncio>
+                <div class="row">
+                  <div class="form-group col-sm-4">
+                      <label>Número do Lote</label>
+                    <input [disabled]="!edit" [(ngModel)]="lote.NumeroLote" name="ad-lote" class="form-control" placeholder="Lote">
+                  </div>
+    
+                  <div class="form-group col-sm-4">
+                    <label>Data de Validade</label>
+                    <input [disabled]="!edit" type="date"  [(ngModel)]="lote.DataVencimento" name="ad-valid-date" class="form-control" placeholder="dd-mm-yyyy">
+                  </div>
+                  <div class=" form-group col-sm-4 mt-label">
+                      <button [disabled]="!edit" (click)="addLote()" class="btn btn-success mt-24 pull-rigth" >Adicionar</button>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-lg-12 mb-3"></div>
+                </div> 
+              <div class="row">
+                <div class="form-group col-sm-12">
+                  <table id="order-listing" class="table">
+                    <thead>
+                      <tr class="bg-primary text-white">
+                        <th>Lote</th>
+                        <th>Data Validade</th>
+                        <th>Ação</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr *ngFor="let lote of anuncio.Lotes; let i = index" [attr.data-index]="i">
+                        <td>{{ lote.NumeroLote}}</td>
+                        <td> {{ getDate(lote.DataVencimento) }} </td>
+                        <td>
+                          <button  class="btn btn-light" (click)="excluirLote(lote, index)">
+                            <i class="mdi mdi-eye text-primary"></i>Excluir
+                          </button>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+             </div>
+                <div class="row" *ngIf="(anuncio.Lotes.length < 1 && !edit)">
+                  <h3>Sem lotes para este anuncio</h3>
+                </div>
+              </form>
+              <div class="form-group row">
+                  <div class="col-md-2 offset-10">
+                    <button *ngIf="!edit" (click)="edit = true" class="btn btn-info pull-rigth fill">Editar</button>
+                  </div>
+                  <div class="col-md-2 offset-8">
+                      <button *ngIf="edit" (click)="edit = false" class="btn btn-default fill">
+                        Cancelar
+                      </button>
+                    </div>
+                  <div class="col-md-2 ">
+                    <button *ngIf="edit" (click)="update()" class="btn btn-success fill">
+                      <span *ngIf="!updating">
+                        Salvar
+                      </span>
+                      <app-loader *ngIf="updating" [type]="'inner'"></app-loader>
+                    </button>
+                  </div>
+                  
+                </div>
+            </ng-template>
+          </ngb-tab>
+        </ngb-tabset>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-body">
+        <div class="card-title">
+          <div class=" d-flex justify-content-between">
+            <h4>
+              Produtos
+
+            </h4>
+            <!--button (click)="openAddProductModal()" class="btn btn-success">
+              Adicionar
+            </button-->
+          </div>
+          <app-loader *ngIf="loading_produtos"></app-loader>
+          <div *ngIf="!loading_produtos" class="container-fluid">
+            <div class="wrapper d-flex align-items-center py-2 border-bottom" *ngFor="let produto of products">
+              <div class="wrapper ml-3">
+                <h6 [routerLink]="['/produtos/', produto.IdProduto]" class="mb-0 empresa-name">
+                  <strong>{{produto.NomeProduto}}</strong>
+                </h6>
+              </div>
+              <div class=" ml-auto px-1 py-1">
+                <div (click)="true" title="Editar Produto" [routerLink]="['/produtos/view/', produto.IdProduto]" class="badge badge-pill edit-empresa badge-primary">
+                  <i class="fa fa-edit"></i>
+                </div>
+
+                <div title="Remover Produto" (click)="hideProduto(produto)" class="badge badge-pill badge-danger remove-filial">
+                  <i class="fa  fa-trash-o"></i>
+                </div>
+              </div>
+            </div>
+            <div class="row" *ngIf="products.length === 0">
+              <div class="form-group col-sm-4">
+                <label>
+                  <strong>Categoria</strong>
+                </label>
+                <select required [disabled]="onlyCategories == null" name="categoria" [(ngModel)]="category"
+                class="form-control" (change)="selectedCategory($event.target)">
+                <option *ngFor='let sub of onlyCategories' [value]="sub.IdCategoria">
+                  {{sub.NomeCategoria}}
+                </option>
+              </select>
+              </div>
+              <div class='col-md-4 form-input'>
+                <div class="form-group">
+                  <label for="code-type"><strong>Subcategoria</strong></label>
+  
+                  <select [disabled]="subcategories == null" name="subcategoria" class="form-control" #s  (change)="onChangeSubcategroy($event.target.value)">
+                    <option disabled>Por favor selecione uma subcategoria</option>
+                    <option *ngFor='let sub of subcategories' [value]="sub.IdCategoria">
+                      {{sub.NomeCategoria}}
+                    </option>
+                  </select>
+                </div>
+              </div>
+  
+              <div class="form-group col-sm-4" >
+                  <label>
+                      <strong>Produto</strong>
+                    </label>
+                <div class="input-group mb-3">
+                  
+                  <select [disabled]="!isCatSelected" required  name="product" id="product" class="form-control"  #p (change)="selectedProduct(p.value)">
+                    <option *ngIf="produtosCategoria.length != 0">Selecione um produto</option>
+                    <option *ngFor='let prod of produtosCategoria' [value]="prod.IdProduto">
+                      {{prod.NomeProduto}}
+                    </option>
+                  </select>
+                </div>
+            </div>
+            <div class="col-md-2 offset-md-8">
+              <button  (click)="products = prodReserv" class="btn btn-danger">
+                <span *ngIf="!updating">
+                  Cancelar
+                </span>
+                <app-loader *ngIf="updating" [type]="'inner'"></app-loader>
+              </button>
+            </div>
+            <div class="col-md-2">
+              <button  (click)="update()" class="btn btn-success">
+                <span *ngIf="!updating">
+                  Salvar
+                </span>
+                <app-loader *ngIf="updating" [type]="'inner'"></app-loader>
+              </button>
+            </div>
+            <!--div *ngIf="products.length < 1" class="d-flex">
+              <h5>Esse anuncio nao possui produtos</h5>
+            </div-->
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

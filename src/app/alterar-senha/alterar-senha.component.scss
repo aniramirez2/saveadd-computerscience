@@ -1,0 +1,30 @@
+.modal
+  .modal-dialog
+    .modal-header {
+      padding: 0 26px !important;
+      background-color: #00a99d !important;
+      border-top-left-radius: 0;
+      border-top-right-radius: 0;
+      .close {
+        padding: 3% 1% 1% 1%;
+        margin: 0%;
+        span {
+          color: #ffffff;
+        }
+      }
+    }
+    .modal-content{
+      background-color: transparent !important;
+      background-clip: padding-box;
+      border: none !important;
+      border-radius: 0px;
+
+    }
+
+
+.card-title {
+    color: #fff;
+    padding: 3% 1% 1%;
+    text-transform: capitalize;
+    font-family: "opensans-semibold", sans-serif;
+}

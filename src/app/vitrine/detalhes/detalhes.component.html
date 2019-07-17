@@ -1,0 +1,130 @@
+
+    <div class="card">
+      <div class="card-body">
+        <h4 class="card-title">{{anuncio?.Titulo}}
+          <div class="fa fa-times pull-right" (click)="closeModal()"></div>
+        </h4>
+        
+        <div class="wrapper d-flex align-items-center" *ngIf="anuncio">
+          <div class="container">
+            <div class="row demo-gallery-poster">
+              <div class="col-md-12">
+                <img [src]="images_url + anuncio.Produtos[0].imagems[0]?.IdImagem">
+              </div>
+              <div class="col-md-10">
+                <div class="row">
+                  <div class="col-md-12">
+                    <strong>Anunciante: {{ empresa.NomeEmpresa }}</strong>
+                  </div>
+                  <div *ngFor="let endereco of empresa.Enderecos">
+                  <div class="col-md-12">
+                    <strong>Endereço: </strong> {{endereco.Logradouro}}, {{endereco.Numero}}, {{endereco.Bairro}}, {{endereco.Cep
+                    }}, {{endereco.Cidade}}, {{endereco.Estado}}
+                  </div>
+                  <div class="col-md-12">
+                    <strong>Realiza entrega: </strong>
+                    <span *ngIf="endereco.RealizaEntrega == 1"> Sim</span>
+                    <span *ngIf="endereco.RealizaEntrega != 1"> Não</span>
+                  </div>
+                  <div class="col-md-12" *ngIf="endereco.RealizaEntrega == 1">
+                    <strong>Regras para entrega: </strong>
+                    <span>{{endereco.RegraEntrega}}</span>
+                  </div>
+                  <div class="col-md-12">
+                    <strong>Aceita retirada: </strong>
+                    <span *ngIf="endereco.PermiteRetirada == 1"> Sim</span>
+                    <span *ngIf="endereco.PermiteRetirada != 1"> Não</span>
+                  </div>
+                  <div class="col-md-12" *ngIf="endereco.PermiteRetirada == 1">
+                    <strong>Regras para retirada: </strong>
+                    <span>{{endereco.RegraRetirada}}</span>
+                  </div>
+                </div>
+                  <div class="col-sm-12">
+                    <strong>Categoria: </strong>
+                    <span>{{ getSubCategoria(anuncio.Categoria)}}</span>
+                  </div>
+                  <div class="col-sm-12">
+                    <strong>Subcategoria: </strong>
+                    <span>{{getCategoria(anuncio.Categoria)}}</span>
+                  </div>
+
+                </div>
+
+                <div class="row" *ngIf="anuncio.SubCategoria">
+                  <div class="col-sm-12">
+                    <strong>Subcategoria: </strong>
+                    <span>{{anuncio.SubCategoria?.NomeCategoria}}</span>
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="col-md-12">
+                    <strong>Descrição: </strong>
+                    <span>{{anuncio.Descricao}}</span>
+                  </div>
+                </div>
+                <div class="row" *ngIf="restricoes">
+                  <div class="col-md-12">
+                    <strong>Restrições: </strong>
+                    <span *ngFor="let item of restricoes" style="display:flex">
+                      <span *ngIf="item.TipoRestricao != 4">{{item.NomeRestricao}}: {{ item.Valor }} </span>
+                      <span *ngIf="item.TipoRestricao == 4 && auxEstado !=null">{{item.NomeRestricao}}: {{ auxEstado.NomeEstado }} </span>
+                      <span></span>
+                      <span></span>
+                  </span>
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="col-sm-12">
+                    <strong>Valor Original: </strong>
+                    <span>{{ anuncio.Produtos[0].ValorUnitarioOriginal | currency:'BRL'}}</span>
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="col-md-12">
+                    <strong>Valor com Desconto: </strong>
+                    <span> {{ anuncio.Produtos[0].ValorUnitarioDesconto | currency:'BRL'}}</span>
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="col-md-12">
+                    <strong>Quantidade Disponível: </strong>
+                    <span>{{ anuncio.Produtos[0].QuantidadeEstoque.toLocaleString('pt-BR')}}</span>
+                    <span class="text-muted">{{anuncio.Produtos[0].Unidade | titlecase}}</span>
+                  </div>
+                </div>
+
+                <div class="row" *ngIf="empresa.FormasPagamento">
+                  <div class="col-md-12">
+                    <strong>Forma Pagamento:</strong>
+                    <!--ul [ngClass]="'forma-pagamento'">
+                      <li [ngClass]="'itens-forma-pagamento'" *ngFor="let pagamento of empresa.FormasPagamento" style="margin-left: 15px"> {{ pagamento.NomeFormaPagamento }} <span></span></li>
+                    </ul-->
+                    <div class="row">
+                      <div class="col-lg-12" *ngFor="let pagamento of empresa.FormasPagamento"  >
+                        {{ pagamento.NomeFormaPagamento }}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+              <div *ngIf="seeAds" class="col-md-2">
+                <div class="row d-flex justify-content-between">
+                  <div class="container">
+                    <a routerLink="/carrinho">
+                      <button (click)="adicionaCarrinho(anuncio)" class="btn btn-info btn-sm mt-3 mb-4">Comprar</button>
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>

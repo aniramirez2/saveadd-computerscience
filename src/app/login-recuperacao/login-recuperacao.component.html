@@ -1,0 +1,26 @@
+<div class="container-fluid login-full-bg">
+  <div class="content-wrapper d-flex align-items-center auth ">
+    <div class="row w-100">
+      <div class="col-lg-8 mx-auto bg-white col-sm-10 col-xs-10">
+        <img src="assets/images/logo.svg" class="img-login" alt="logo" />
+          <form class="p-5 formRecuperarSenha" name="loginForm" novalidate>
+            <div class="form-group">
+              <i class="mdi mdi-account"></i>
+              <label for="username">Informe o e-mail Cadastrado </label>
+              <input class="col-md-12 my-2" email [(ngModel)]="emailrec" #email="ngModel" required name="email" class="form-control input-md" type="email" placeholder="Email">
+            </div>
+            <div class="row">
+              <div class="mt-2 col-sm-12 col-md-6">
+                <button type="submit" class="btn btn-block btn-success font-weight-medium" (click)="passwordForm()">Recuperar senha
+                  <app-loader *ngIf="loading" [type]="'inner'" [styles]="{'marging-left': 'auto', 'margin-right': 'auto'}"></app-loader>
+                </button>
+              </div>
+              <div class="mt-2 col-sm-12 col-md-6">
+                <a [routerLink]="['/']" class="btn btn-block btn-danger font-weight-medium">Voltar ao Login</a>
+              </div>
+            </div>
+          </form>
+      </div>
+    </div>
+  </div>
+</div>

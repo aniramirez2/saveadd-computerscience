@@ -1,0 +1,395 @@
+////////// COLOR SYSTEM //////////
+$blue: #1094f7;
+$indigo: #6610f2;
+$purple: #ab8ce4;
+$pink: #E91E63;
+$red: #D62D24;
+$orange: #fb9678;
+$yellow: #ff9800;
+$green: #00a99d;
+$teal: #58d8a3;
+$cyan: #57c7d4;
+$black: #000;
+$white: #ffffff;
+$white-smoke: #f4f4f4;
+$ghost-white: #f7fafc;
+$violet: #41478a;
+$darkslategray: #2e383e;
+$dodger-blue: #3498db;
+$blue-teal-gradient: linear-gradient(88deg, #13b4ca, #18cabe);
+$principal: #2f475b;
+
+
+$colors: (
+  blue: $blue,
+  indigo: $indigo,
+  purple: $purple,
+  pink: $pink,
+  red: $red,
+  orange: $orange,
+  yellow: $yellow,
+  green: $green,
+  teal: $teal,
+  cyan: $cyan,
+  white: $white,
+  principal: $principal,
+  gray: #434a54,
+  gray-light: #aab2bd,
+  gray-lighter: #e8eff4,
+  gray-lightest: #e6e9ed,
+  gray-dark: #0f1531,
+  black: #000000
+);
+
+
+$social-colors: (
+  twitter: #1da1f2,
+  facebook: #3b579d,
+  google: #dc4a38,
+  linkedin: #0177b4,
+  pinterest: #cc2127,
+  youtube: #e52d27,
+  github: #333333,
+  behance: #1769ff,
+  dribbble: #ea4c89,
+  reddit: #ff4500
+);
+
+
+$theme-colors: (
+  primary: $blue,
+  secondary: $white-smoke,
+  success: $green,
+  info: $principal,
+  warning: $yellow,
+  danger: $red,
+  light: $white,
+  dark: #3a3f51
+);
+
+////////// COLOR SYSTEM //////////
+
+
+
+////////// THEME VARIABLES //////////
+
+$content-bg: #f4f4f8;
+$footer-bg: $content-bg;
+$footer-color: color(dark);
+$border-color: #CCC;
+$text-muted: #b7b7b7;
+$body-color: #12131a;
+
+////////// THEME VARIABLES //////////
+
+
+
+////////// TYPOGRAPHY //////////
+
+$default-font-size: 0.875rem;
+$small-font-size: 0.75rem;
+$type1-light:    'opensans-light', sans-serif;
+$type1-regular:  'opensans-regular', sans-serif;
+$type1-semibold: 'opensans-semibold', sans-serif;
+$type1-bold:     'opensans-bold', sans-serif;
+
+$type2-regular:  'Montserrat-regular', sans-serif;
+$type2-semibold: 'Montserrat-semibold', sans-serif;
+
+////////// TYPOGRAPHY //////////
+
+
+
+////////// SIDEBAR ////////
+
+$sidebar-width-lg: 265px;
+$sidebar-width-mini: 185px;
+$sidebar-width-icon: 70px;
+$sidebar-menu-font-size: 0.8125rem;
+$sidebar-menu-padding: 1rem 1.875rem;
+$nav-link-height: 52px;
+$sidebar-submenu-padding: 0 0 0 4.25rem;
+$sidebar-submenu-font-size: 0.75rem;
+$sidebar-submenu-item-padding: 0.75rem 1rem;
+$sidebar-icon-font-size: 0.9375rem;
+$sidebar-profile-bg: transparent;
+$sidebar-profile-padding:14px 14px 17px 50px;
+$sidebar-mini-menu-padding: 0.8125rem 1rem 0.8125rem 1rem;
+$sidebar-icon-only-submenu-padding: 0 0 0 1.5rem;
+$sidebar-icon-only-submenu-width: 200px;
+$rtl-sidebar-submenu-padding: 0 2.05rem 0 0;
+
+// Light Sidebar
+$sidebar-light-bg: $white;
+$sidebar-light-menu-color: #000;
+$sidebar-light-active-color: #000;
+$sidebar-light-menu-active-bg: initial;
+$sidebar-light-menu-active-color: #404852;
+$sidebar-light-menu-hover-bg: #f6f6f6;
+$sidebar-light-menu-hover-color: $sidebar-light-active-color;
+$sidebar-light-submenu-color: #999999;
+$sidebar-light-submenu-hover-bg: initial;
+$sidebar-light-submenu-hover-color: #000;
+$sidebar-light-menu-icon-color: #00a99d;
+$sidebar-light-active-icon-color: $sidebar-light-menu-icon-color;
+$sidebar-light-menu-arrow-color: #7b7b7b;
+$sidebar-light-profile-name-color: #404852;
+$sidebar-light-profile-title-color: #8d9498;
+
+$sidebar-light-category-color: #000;
+
+// Dark Sidebar
+$sidebar-dark-bg: #18151e;
+$sidebar-dark-menu-color: #8287a9;
+$sidebar-dark-menu-active-bg: #282037;
+$sidebar-dark-menu-active-color: color(white);
+$sidebar-dark-menu-hover-bg: #282037;
+$sidebar-dark-menu-hover-color: color(white);
+$sidebar-dark-submenu-color: $sidebar-dark-menu-color;
+$sidebar-dark-submenu-hover-bg: initial;
+$sidebar-dark-submenu-hover-color: #ffffff;
+
+$sidebar-dark-category-color: #464b66;
+$sidebar-category-font-size: .6875rem;
+$sidebar-category-padding: 20px 15px 11px 32px;
+
+///////// SIDEBAR ////////
+
+
+
+///////// SETTINGS PANEL ////////
+$settings-panel-width: 300px;
+
+
+
+///////// HORIZONTAL MENU /////////
+
+$horizontal-menu-bg: $white;
+$horizontal-menu-padding: 0 1rem;
+$horizontal-menu-height: 57px;
+$horizontal-menu-item-color: #202339;
+$horizontal-menu-submenu-color: $horizontal-menu-item-color;
+$horizontal-menu-font-size: 0.875rem;
+$horizontal-menu-item-padding: 2px 0;
+$horizontal-menu-icon-font-size: 0.9375rem;
+$horizontal-menu-submenu-item-padding: 0.85rem 0;
+
+///////// HORIZONTAL MENU /////////
+
+
+
+///////// NAVBAR ////////
+
+$navbar-height: 58px;
+$navbar-font-size: 0.9375rem;
+$navbar-icon-font-size: 1.25rem;
+
+///////// NAVBAR ////////
+
+
+
+///////// BUTTONS ////////
+
+$btn-font-size: 0.875rem;
+$btn-padding-y: 0.56rem;
+$btn-padding-x: 1.375rem;
+$btn-border-radius: 0.1875rem;
+
+$btn-font-size-xs: 0.625rem;
+$btn-padding-y-xs: 0.5rem;
+$btn-padding-x-xs: 0.75rem;
+$btn-border-radius-xs: 0rem;
+
+$btn-font-size-sm: 0.875rem;
+$btn-padding-y-sm: 0.50rem;
+$btn-padding-x-sm: 0.81rem;
+$btn-border-radius-sm: 0.1875rem;
+
+$btn-font-size-lg: 0.875rem;
+$btn-padding-y-lg: 0.94rem;
+$btn-padding-x-lg: 1.94rem;
+$btn-border-radius-lg: 0.1875rem;
+
+$button-fixed-width: 120px;
+$social-btn-padding: 20px;
+$social-btn-icon-size: 1rem;
+
+///////// BUTTONS ////////
+
+
+
+/////////  FORMS /////////
+
+$input-bg: #FFF;
+$input-border-radius: 2px;
+$input-placeholder-color: #c9c8c8;
+$input-font-size: 0.75rem;
+$input-padding-y: 0.56rem;
+$input-padding-x: 1.375rem;
+$input-line-height: 1;
+$input-padding-y-sm: 0.5rem;
+$input-padding-x-sm: 0.81rem;
+$input-line-height-sm: 1;
+$input-padding-y-lg: 0.94rem;
+$input-padding-x-lg: 1.94rem;
+$input-line-height-lg: 1;
+
+
+//--- Checkbox Radio Default ---//
+
+$checkbox-radio-border-width:2px;
+$checkbox-radio-border-radius: 3px;
+//Checkbox-Radio Normal State
+$checkbox-radio-bg: $input-bg;
+$checkbox-radio-border-color: darken($border-color,5%);
+
+//Checkbox-Radio Active State
+$checkbox-radio-active-bg: darken($checkbox-radio-bg,5%);
+$checkbox-radio-active-border-color: darken($checkbox-radio-border-color,20%);
+$checkbox-radio-tick-color: theme-color(info);
+
+//Checkbox-Radio Disabled State
+$checkbox-radio-disabled-bg: rgba($checkbox-radio-bg, 0.3);
+$checkbox-radio-disabled-border-color: rgba($checkbox-radio-border-color, 0.4);
+$checkbox-radio-disabled-tick-color: lighten($checkbox-radio-tick-color,20%);
+
+
+//--- Checkbox Radio Flat ---//
+
+// Checkbox-Radio Flat Normal State
+$checkbox-radio-flat-bg: theme-color(success);
+$checkbox-radio-flat-border-color: $checkbox-radio-flat-bg;
+
+//Checkbox-Radio Flat Active State
+$checkbox-radio-flat-active-bg: darken($checkbox-radio-flat-bg,5%);
+$checkbox-radio-flat-active-border-color: $checkbox-radio-flat-active-bg;
+$checkbox-radio-flat-tick-color: color(white);
+
+//Checkbox-Radio Flat Disabled State
+$checkbox-radio-flat-disabled-bg: rgba($checkbox-radio-flat-bg, 0.3);
+$checkbox-radio-flat-disabled-border-color: rgba($checkbox-radio-flat-bg, 0);
+$checkbox-radio-flat-disabled-tick-color: lighten($checkbox-radio-flat-tick-color,50%);
+
+///////// FORMS /////////
+
+
+
+////////  DROPDOWNS ///////
+
+$dropdown-border-color: $border-color;
+$dropdown-divider-bg: $border-color;
+$dropdown-link-color: $body-color;
+$dropdown-header-color: $body-color;
+
+////////  DROPDOWNS ///////
+
+
+
+//////// TABLES ////////
+
+$table-accent-bg: $content-bg;
+$table-hover-bg: $content-bg;
+$table-cell-padding: 0.9375rem;
+$table-border-color: $border-color;
+$table-dark-bg: theme-color(dark);
+$table-dark-color: $white;
+
+//////// TABLES ////////
+
+
+
+////////// MEASUREMENT AND PROPERTY VARIABLES //////////
+
+$boxed-container-width: 96%;
+$border-property: 1px solid $border-color;
+$card-spacing-y: 1.875rem;
+$card-padding-y: 1.88rem;
+$card-padding-x: 1.81rem;
+$grid-gutter-width: 30px;
+$action-transition-duration: 0.25s;
+$action-transition-timing-function: ease;
+
+////////// OTHER VARIABLES //////////
+
+
+
+////////// BREAD CRUMBS VARIABLES //////////
+
+$breadcrumb-padding-y: 0.56rem;
+$breadcrumb-padding-x: 1.13rem;
+$breadcrumb-item-padding: 0.5rem;
+$breadcrumb-margin-bottom: 1rem;
+$breadcrumb-font-size: $default-font-size;
+$breadcrumb-bg: transparent;
+$breadcrumb-divider-color: $gray-600;
+$breadcrumb-active-color: $gray-700;
+$breadcrumb-divider: "/";
+$breadcrumb-custom-padding-y: 0;
+$breadcrumb-custom-padding-x: 0;
+$breadcrumb-custom-item-padding-y: 0.56rem;
+$breadcrumb-custom-item-padding-x: 10px;
+$breadcrumb-custom-item-color: $black;
+$breadcrumb-item-bg: #dbe3e6;
+
+////////// BREAD CRUMBS VARIABLES //////////
+
+
+
+////////// MODALS VARIABLES //////////
+
+$modal-inner-padding: 15px;
+$modal-dialog-margin: 10px;
+$modal-dialog-margin-y-sm-up: 30px;
+$modal-title-line-height: $line-height-base;
+$modal-content-bg: $content-bg;
+$modal-content-box-shadow-xs: 0 3px 9px rgba($black,.5);
+$modal-content-box-shadow-sm-up: 0 5px 15px rgba($black,.5);
+$modal-backdrop-bg: $black;
+$modal-backdrop-opacity: 0.5;
+$modal-header-border-color: $border-color;
+$modal-content-border-color: $border-color;
+$modal-footer-border-color: $border-color;
+$modal-header-border-width: $border-width;
+$modal-content-border-width: $border-width;
+$modal-footer-border-width: $border-width;
+$modal-header-padding-x: 26px;
+$modal-header-padding-y: 25px;
+$modal-body-padding-x: 26px;
+$modal-body-padding-y: 35px;
+$modal-footer-padding-x: 31px;
+$modal-footer-padding-y: 15px;
+$modal-lg: 90%;
+$modal-md: 500px;
+$modal-sm: 300px;
+$modal-transition: transform 0.4s ease;
+
+////////// MODALS VARIABLES //////////
+
+
+
+////////// TOOLTIP VARIABLES //////////
+
+$tooltip-font-size: 0.75rem;
+$tooltip-padding-y: 0.4rem;
+$tooltip-padding-x: 0.75rem;
+$tooltip-border-radius: 0.375rem;
+$tooltip-bg: darken($content-bg,40%);
+$tooltip-arrow-color: $tooltip-bg;
+
+////////// TOOLTIP VARIABLES //////////
+
+
+
+////////// POPOVER VARIABLES //////////
+
+$popover-bg: $content-bg;
+$popover-border-color: $border-color;
+$popover-arrow-color: $popover-bg;
+$popover-header-bg: theme-color(success);
+
+////////// POPOVER VARIABLES //////////
+
+////////// Vendor file asset path //////////
+$mdi-font-path:        "~mdi/fonts";
+$fa-font-path: "~font-awesome/fonts";
+$simple-line-font-path: "~simple-line-icons/fonts/";

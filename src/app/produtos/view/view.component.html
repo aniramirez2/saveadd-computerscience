@@ -1,0 +1,276 @@
+<div class="row">
+  <div class="col-md-12 grid-margin">
+    <!--button routerLink="/produtos" class="btn btn-default return">Voltar</button-->
+    <div class="card grid-margin">
+      <div class="card-body">
+        <h4 class="card-title">Editar Produto</h4>
+
+        <app-loader *ngIf="loading_page"></app-loader>
+        <ngb-alert *ngIf="successMessage" type="success" (close)="successMessage = null">{{ successMessage }}
+        </ngb-alert>
+        <ngb-alert *ngIf="errorMessage" type="danger" (close)="errorMessage = null">{{ errorMessage }}</ngb-alert>
+        <ngb-tabset class="tab-basic" *ngIf="!loading_page" (tabChange)="beforeChange($event)">
+          <ngb-tab>
+            <ng-template ngbTabTitle>
+              <h4>Detalhes do Produto
+                <span class="text-muted">{{produto?.NomeProduto}}</span>
+              </h4>
+            </ng-template>
+            <ng-template ngbTabContent>
+              <form #editProduto class="row">
+                <div class="form-group col-md-6">
+                  <label>Nome</label>
+                  <input class="form-control" name="nome" [ngModel]="produto?.NomeProduto"
+                    (ngModelChange)="produto.NomeProduto = $event">
+                </div>
+                <div class="form-group col-md-6">
+                  <label>Código Interno</label>
+                  <input class="form-control" name="codigoInterno" [ngModel]="produto?.CodigoInterno"
+                    (ngModelChange)="produto.CodigoInterno = $event">
+                </div>
+                <div class='col-md-4 form-input'>
+                  <div class="form-group">
+                    <label for="categoria">Categoria</label>
+                    <select (change)="onChange($event.target.value)" name="categoria" class="form-control"
+                      [ngModel]="Categoria">
+                      <option [value]="Categoria" selected="selected">
+                      </option>
+                      <option *ngFor='let category of categories' [ngValue]="category.IdCategoria">
+                        {{category.NomeCategoria}}
+                      </option>
+                    </select>
+                  </div>
+                </div>
+                <div class='col-md-4 form-input'>
+                  <div class="form-group">
+                    <label for="code-type">Subcategoria</label>
+
+                    <select [disabled]="subcategories == null" name="code_type" class="form-control" #sub
+                      [ngModel]="Subcategoria" (change)="onChangeSubCategoria(sub.value)">
+                      <option [value]="Subcategoria" selected="selected">
+                      </option>
+                      <option *ngFor='let sub of subcategories' [ngValue]="sub.IdCategoria ">
+                        {{sub.NomeCategoria}}
+                      </option>
+                    </select>
+                  </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                      <label for="manufacturer">Fabricante</label>
+                      <!-- <input [ngModel]="product.manufacturer" (ngModelChange)="product.manufacturer=$event" id="manufacturer" name="manufacturer"
+                        class="form-control"> -->
+    
+                      <ng-template #rtFabricante let-r="result" let-t="term">
+                        <span>{{r.NomeFabricante}}</span>
+                      </ng-template>
+                      <input #rawFabricante name="fabricante" id="fabricante" type="text" class="form-control" [(ngModel)]="produto.Fabricante" [ngbTypeahead]="searchFabricante"
+                        (focus)="focusFabricante.next($event.target.value)" (click)="clickFabricante.next($event.target.value)"
+                        #thFabricante="ngbTypeahead" [inputFormatter]="fabricante_formatter" (ngModelChange)="newFabricante($event)"
+                        [editable]="false" [resultTemplate]="rtFabricante" (selectItem)="selectFabricante($event)" placeholder="Fabricante"
+                      />
+                    </div>
+                    <!-- <p>Fabricante: {{fabricante?.NomeFabricante}}</p> -->
+                  </div>
+                <div class="form-group col-md-12">
+                  <label>Descrição (interna - não é exibida na vitrine)</label>
+                  <textarea [ngModel]="produto.DescricaoProduto" required
+                    (ngModelChange)="produto.DescricaoProduto=$event" id="description" name="description"
+                    class="form-control" rows="3"> </textarea>
+                </div>
+              </form>
+              <div class="row">
+                <div class="form-group col-md-2 offset-md-8">
+                  <button routerLink="/produtos" class="btn btn-default fill">
+                    Cancelar
+                  </button>
+                </div>
+                <div class="form-group col-md-2 ">
+                  <button (click)="update()" class="btn btn-success fill">
+                    <span *ngIf="!updating">
+                      Salvar
+                    </span>
+                    <app-loader *ngIf="updating" [type]="'inner'"></app-loader>
+                  </button>
+                </div>
+              </div>
+            </ng-template>
+          </ngb-tab>
+
+          <!--ngb-tab id="1">
+            <ng-template ngbTabTitle>
+              <h4>Lotes
+              </h4>
+            </ng-template>
+            <ng-template ngbTabContent>
+              <form #editProduto>
+                <div class="row">
+                  <div class="form-group col-md-4">
+                    <label>Número</label>
+                    <input class="form-control" name="numero-lote" [ngModel]="lote?.NumeroLote" (ngModelChange)="lote.NumeroLote = $event">
+                  </div>
+                  <div class="form-group col-md-4">
+                    <label>Vencimento</label>
+                    <input type="date" [ngModel]="lote.DataVencimento" required (ngModelChange)="lote.DataVencimento=$event"
+                      id="lote" name="vencimento" class="form-control">
+                  </div>
+                  <div class="col-md-4 mt-24">
+                    <button [disabled]="!edit" (click)="addLote()" class="btn btn-success">Adicionar</button>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="form-group col-sm-6">
+                    <table id="order-listing" class="table">
+                      <thead>
+                        <tr class="bg-primary text-white">
+                         
+                          <th>Número</th>
+                          <th>Vencimiento</th>
+                          <th>Ação</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr *ngFor="let lote of produto.Lotes; let i = index" [attr.data-index]="i">
+                          <td>{{lote.Numero  }}</td>
+                          <td>{{lote.DataVencimento}} </td>
+                          <td>
+                            <button [disabled]="!edit" class="btn btn-light" (click)="excluirLote(cod, i)">
+                              <i class="mdi mdi-eye text-primary"></i>Excluir
+                            </button>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+               </div>
+                <div class="form-group col-md-12">
+                  <button *ngIf="!edit" (click)="edit = true" class="btn btn-info">Editar</button>
+                  <button *ngIf="edit" (click)="update()" class="btn btn-success">
+                    <span *ngIf="!updating">
+                      Salvar
+                    </span>
+                    <app-loader *ngIf="updating" [type]="'inner'"></app-loader>
+                  </button>
+                  <button *ngIf="edit" (click)="edit = false" class="btn btn-default">
+                    Cancelar
+                  </button>
+                </div>
+              </form>
+            </ng-template>
+          </ngb-tab-->
+
+          <ngb-tab id="2">
+            <ng-template ngbTabTitle>
+              <h4>Códigos
+              </h4>
+            </ng-template>
+            <ng-template ngbTabContent>
+
+              <form #editProduto>
+                <div class="row">
+                  <div class='col-md-4 form-input'>
+                    <div class="form-group">
+                      <label for="code-type">Tipo de Código</label>
+                      <select name="code_type" class="form-control" [ngModel]="none" #cod
+                        (change)="onChangeCodigo(cod)">
+                        <option *ngFor="let cod of tipos_codigo" [ngValue]="cod.id">
+                          {{cod.nome}}
+                        </option>
+                      </select>
+                    </div>
+                  </div>
+
+                  <div class="form-group col-md-4">
+                    <label>Códigos</label>
+                    <input type="text" [(ngModel)]="codigo.Codigo" required (ngModelChange)="codigo.Codigo=$event"
+                      id="codigo" name="codigo-barras" class="form-control">
+                  </div>
+                  <div class="col-md-4 ">
+                    <button [disabled]="!edit" (click)="addCodigo()" class="btn btn-success mt-24">Adicionar</button>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="form-group col-sm-6">
+                    <table id="order-listing" class="table">
+                      <thead>
+                        <tr class="bg-primary text-white">
+
+                          <th>Tipo Código</th>
+                          <th>Código de Barras</th>
+                          <th>Ação</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr *ngFor="let cod of produto.CodigoBarras; let i = index" [attr.data-index]="i">
+                          <td>{{getCodigo(cod.TipoCodigoBarras)  }}</td>
+                          <td>{{cod.Codigo}} </td>
+                          <td>
+                            <button [disabled]="!edit" class="btn btn-light" (click)="excluirCod(cod, i)">
+                              <i class="mdi mdi-eye text-primary"></i>Excluir
+                            </button>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+                <div class="form-group col-md-12">
+                  <button *ngIf="!edit" (click)="edit = true" class="btn btn-info">Editar</button>
+                  <button *ngIf="edit" (click)="updateCodigos()" class="btn btn-success">
+                    <span *ngIf="!updating">
+                      Salvar
+                    </span>
+                    <app-loader *ngIf="updating" [type]="'inner'"></app-loader>
+                  </button>
+                  <button *ngIf="edit" (click)="edit = false" class="btn btn-default">
+                    Cancelar
+                  </button>
+                </div>
+              </form>
+            </ng-template>
+          </ngb-tab>
+        </ngb-tabset>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-body">
+        <div class="card-title">
+          <div class=" justify-content-between">
+            <h4>
+              Imagens
+
+            </h4>
+            <div class="row">
+              <div class="col-md-2 offset-md-10">
+                <button *ngIf="images != undefined && images.length>0" (click)="removeImage(produto)"
+                  class="btn btn-danger">
+                  Excluir
+                </button>
+              </div>
+              <div class="col-md-2 offset-md-10">
+                <button *ngIf="images != undefined && images.length == 0" (click)="openAddImageModal(produto)"
+                  class="btn btn-success">
+                  Adicionar
+                </button>
+              </div>
+            </div>
+          </div>
+          <app-loader *ngIf="loading_imagens"></app-loader>
+
+          <div *ngIf="!loading_imagens" class="container-fluid">
+            <div class="wrapper d-flex align-items-center py-2 border-bottom" *ngIf="images.length>0">
+              <div class="row">
+                <div class="col-md-4">
+                  <img width="200n of PRIMARY KEY constraint 'Ppx" class="product-image" alt="product-image"
+                    [src]="images_url + images[0].IdImagem">
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>

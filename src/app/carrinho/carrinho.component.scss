@@ -1,0 +1,33 @@
+.mensagemSucesso {
+    border: 1px solid lightgreen;
+    padding: 15px 0;
+    text-align: center;
+    font-size: 13px;
+    text-transform: uppercase;
+    color: black;
+    width: 75%;
+    margin: 15px auto 0;
+    animation: fadein 2s;
+    -moz-animation: fadein 2s; /* Firefox */
+    -webkit-animation: fadein 2s; /* Safari and Chrome */
+    -o-animation: fadein 2s; /* Opera */
+  }
+  @media screen and (max-width: 600px) {
+    .hidden-xs {
+      display: none !important;
+    }
+  }
+  .border-cart{
+    border: 1px solid grey;
+    border-radius: 9px
+  }
+  .fill{
+    width: stretch
+  }
+  .show-section{
+    display: block !important;
+    margin: 10px
+  }
+  .hide-button{
+    display: none
+  }

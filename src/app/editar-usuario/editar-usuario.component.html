@@ -1,0 +1,71 @@
+<div class="row">
+  <div class="col-lg-12 grid-margin stretch-card">
+    <form #editForm="ngForm" class="forms-sample" novalidate style="width: 100%">
+      <ngb-alert *ngIf="successMessage" type="success" (close)="successMessage = null">{{ successMessage }}</ngb-alert>
+
+      <div class="card">
+        <div class="card-body">
+          <h4 class="card-title"> Editar Dados Pessoais</h4>
+          <app-loader *ngIf="loading_page"></app-loader>
+
+          <div class="container" *ngIf="!loading_page">
+            <div class="row">
+              <div class='col-md-6'>
+                <div class="form-group">
+                  <label class="control-label" for="NomeUsuario">Nome</label>
+                  <input class="form-control input-md" required id="NomeUsuario" name="NomeUsuario" type="text" placeholder="Nome" [(ngModel)]="full_name"
+                    (ngModelChange)="updateName($event)" #nome_usuario="ngModel">
+                  <div class="alert alert-danger" [hidden]="full_name">Campo Nome é obrigatório</div>
+                </div>
+              </div>
+              <div class='col-md-6'>
+                <div class="form-group">
+                  <label class="control-label" for="Cpf">CPF</label>
+                  <input [textMask]="{mask: masks.cpf}" #cpf="ngModel" class="form-control input-md" disabled required id="Cpf" name="Cpf"
+                    type="text" placeholder="CPF" [ngModel]="user?.Cpf" (ngModelChange)="user.Cpf=$event">
+                  <div class="alert alert-danger" [hidden]="cpf.invalid || cpf.pristine">Campo CPF é obrigatório</div>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class='col-md-6'>
+                <div class="form-group">
+                  <label class="control-label" for="email">Email</label>
+                  <input class="form-control input-md" required pattern="^[^\s@]+@[^\s@]+\.[^\s@]{2,}$" id="email" name="Email" type="text"
+                    placeholder="Email" [ngModel]="user?.Email" (ngModelChange)="user.Email=$event" #email="ngModel">
+                  <div class="alert alert-danger" [hidden]="email.valid || email.pristine">Email inválido</div>
+                </div>
+              </div>
+              <div class='col-md-6'>
+                <div class="form-group">
+                  <label class="control-label" for="DataNascimento">Data Nascimento</label>
+                  <input class="form-control input-md" required id="DataNascimento" name="DataNascimento" type="date" max="2999-12-31" placeholder="Data Nascimento"
+                    [ngModel]="user?.DataNascimento | date:'yyyy-MM-dd'" (ngModelChange)="user.DataNascimento=$event"
+                    #birthday="ngModel">
+                  <div class="alert alert-danger" [hidden]="birthday.valid || birthday.pristine">Campo Data Nascimento é obrigtório</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+                <div class="col-sm-2 offset-md-8 form-group">
+                    <button class="btn btn-info" (click)="openAlterarSenhaModal()">Alterar Senha</button>
+                </div>
+              <div class="col-sm-2 form-group">
+                <button [disabled]=" updating ||!editForm.form.valid || (password != password_confirmation)" (click)="updateData()" type="submit"
+                  class="btn btn-success width-to-align">
+                  <span *ngIf="!updating">
+                    Salvar
+                  </span>
+                  <app-loader *ngIf="updating" [type]="'inner'"></app-loader>
+                </button>
+              </div>
+              
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

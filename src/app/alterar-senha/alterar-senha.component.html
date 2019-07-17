@@ -1,0 +1,37 @@
+<div class="card">
+  <div class="modal-header">
+    <h4 class="card-title">Alterar Senha</h4>
+    <button type="button" class="close" aria-label="Close" (click)="activeModal.dismiss('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+
+  <div class="card-body modal-body">
+    <form  #changePasswordForm="ngForm">
+      <div class="row" *ngIf="!successMessage">
+        <div class='col-md-6'>
+          <div class="form-group">
+            <label class="control-label" for="Senha">Senha</label>
+            <input minlength="6" class="form-control input-md" required id="Senha" name="Senha" type="password" placeholder="Senha" [ngModel]="password"
+              (ngModelChange)="password=$event">
+            <div *ngIf="password" class="alert alert-danger" [hidden]="password == password_confirmation">As senhas não conferem</div>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="form-group">
+            <label class="control-label" for="ConfirmarSenha">Confirmar Senha</label>
+            <input [ngModel]="password_confirmation" (ngModelChange)="password_confirmation=$event" class="form-control input-md" required
+              id="ConfirmarSenha" name="ConfirmarSenha" type="password" placeholder="Confirmar Senha">
+          </div>
+        </div>
+      </div>
+    </form>
+    <ngb-alert *ngIf="successMessage" type="success" (close)="successMessage = null">{{ successMessage }}</ngb-alert>
+  </div>
+
+  <div class="modal-footer">
+    <button type="button" class="btn btn-outline-dark" (click)="activeModal.close('Close click')">Fechar</button>
+    <button [disabled]="!changePasswordForm.form.valid || updated || password_confirmation !== password" type="button" class="btn btn-success"
+      (click)="updatePassword()">Salvar</button>
+  </div>
+</div>

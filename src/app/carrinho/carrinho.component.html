@@ -1,0 +1,332 @@
+<ngx-spinner bdColor="rgba(51,51,51,0.8)" size="large" color="#00a99d" type="line-scale">
+  <p style="font-size: 20px; color: #00a99d">Carregando...</p>
+</ngx-spinner>
+<div class="row">
+  <div class="col-lg-12 grid-margin">
+    <div class="card">
+      <div class="card-body">
+        <h4 class="card-title" [hidden]="!finished">Carrinho de compras</h4>
+        <div class="mensagemSucesso" *ngFor="let error of errorMessage">
+          O pedido {{error}} foi criado com sucesso
+        </div>
+        <div class="container" *ngIf="anuncios.length > 0">
+          <form #checkout="ngForm">
+            <div class=" wrapper align-items-center py-2" *ngFor="let an of anuncios; let j = index">
+              <div class="row  border-cart">
+                <!-- se o anuncio tem varios produtos de uma marca x-->
+                <div *ngIf="validateArray(an)" class="col-lg-12">
+                  <div class="row" >
+                    <div class="col-lg-12">
+                      <table id="order-listing" class="table">
+                        <thead>
+                          <tr>
+                            <th width="10%"></th>
+                            <th width="30%"> Nome do Produto</th>
+                            <th width="20%">Quantidade</th>
+                            <th width="20%">Valor Unitário</th>
+                            <th width="10%">Total</th>
+                            <th width="10%"></th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr *ngFor="let anuncio of an; let i = index">
+                            <td *ngIf="anuncio.Produtos[0].imagems != undefined">
+                              <img *ngIf="anuncio.Produtos[0].imagems.length > 0" (click)="detalhes(anuncio)" class="img-sm rounded-circle"
+                                [src]="images_url + anuncio.Produtos[0].imagems[0].IdImagem" alt="profile" />
+                                <img *ngIf="anuncio.Produtos[0].imagems.length == 0" (click)="detalhes(anuncio)" class="img-sm rounded-circle"
+                                src="https://saveadd.blob.core.windows.net/documentos/produto-sem-imagem.gif" />
+                            </td>
+                            <td *ngIf="anuncio.Produtos[0].imagems == undefined">
+                              <img  (click)="detalhes(anuncio)" class="img-sm rounded-circle"
+                                src="https://saveadd.blob.core.windows.net/documentos/produto-sem-imagem.gif" />
+                            </td>
+                            <td><a (click)="detalhes(anuncio)">
+                                <strong>{{anuncio.Titulo}}</strong></a> </td>
+                            <td> 
+                              <input [ngModel]="getValueRestricao(anuncio, j,i)"  name="quantity{{i}}"
+                                (change)="updateQuantidade($event, j, anuncio, i)" type="number" min="{{getValueRestricao(anuncio, j,i)}}"
+                                style="max-width: 60px" max="{{getMaxValueRestricao(anuncio, j,i)}}">
+                              <small class="text-muted mb-0">Disponível:
+                                {{anuncio.Produtos[0].QuantidadeEstoque}}</small>
+                            </td>
+                            <td>{{ anuncio.Produtos[0].ValorUnitarioDesconto |  currency:'BRL':true }}</td>
+                            <td>
+                                {{ anuncios_checkout[j][i].TotalProd |  currency:'BRL':true }}
+                            </td>
+                            <td>
+                              <div title="Remover Produto" (click)="removeAnuncio(j, i)"
+                                class="badge badge-pill badge-danger remove-produto pull-right">
+                                <i class="fa  fa-trash-o"> </i>
+                              </div>
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table> 
+                      <div class="col-lg-12">
+                        <div class="row">
+                          <div class="col-lg-12">
+                            <div class="pull-left" *ngIf="empresasByAnuncio.length > 0 &&  empresasByAnuncio[j] != undefined">Total da empresa
+                                {{empresasByAnuncio[j].NomeEmpresa}}:
+                                {{getTotalByEmpresa(an,j) | currency:'BRL'}}
+                            </div>
+                          
+                          <div class="form-group pull-right">
+                              <button id=button{{j}} (click)="completarpedido(j)" class="btn btn-success">
+                                  Avançar para Finalização
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    <!-- Aqui é só o ngfor para os itens nao para os dados da empresa-->
+                    <div class="row" id="section{{j }}" style="display:none">
+                        
+                    <div class="col-lg-6">
+                      <div class="row">
+                        
+                        <div class="col-lg-12" *ngIf="empresasByAnuncio.length > 0">
+                          
+                          <div [hidden]="!showFaltante" style="color: red; margin-left: 27px">Faltam {{ faltante | currency:'BRL'}} para
+                            completar o valor do pedido mínimo</div>
+                            <!--div *ngFor="let anuncio of an; let k = index" >
+                              <div style="color: #ff0000; margin-left: 27px"> 
+                                <span *ngIf=" anuncios_checkout[j][k].Quantidade < getValueRestricao(anuncio,j,k)"> A quantidade mínima do anuncio {{anuncio.Titulo}} é {{rest.Valor}}</span>
+                                <span *ngIf="anuncios_checkout[j][k].Quantidade > getMaxValueRestricao(anuncio,j,k)"> A quantidade máxima do anuncio {{anuncio.Titulo}} é {{rest.Valor}}  {{anuncios_checkout[j][k].Quantidade}}</span>
+                              </div>
+                            </div--> 
+                        </div>                      
+                       </div>
+                    </div>
+                  </div>
+                  </div>
+                </div>
+              </div>
+                <!-- se o anuncio é so de um prudto de uma marca x-->
+                
+                <div class="col-lg-12" *ngIf="!validateArray(an)">
+                  <div class="row" >
+                    <div class="col-lg-12">
+                      <table id="order-listing" class="table">
+                        <thead>
+                          <tr>
+                            <th width="10%"></th>
+                            <th width="30%">Nome do Produto</th>
+                            <th width="20%">Quantidade</th>
+                            <th width="20%">Valor Unitário</th>
+                            <th width="10%">Total</th>
+                            <th width="10%"></th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr>
+                            <td *ngIf="an.Produtos[0].imagems != undefined">
+                                <img *ngIf="an.Produtos[0].imagems.length > 0" (click)="detalhes(anuncio)" class="img-sm rounded-circle"
+                                [src]="images_url + an.Produtos[0].imagems[0].IdImagem" alt="profile" />
+                                <img *ngIf="an.Produtos[0].imagems.length == 0" (click)="detalhes(anuncio)" class="img-sm rounded-circle"
+                                src="https://saveadd.blob.core.windows.net/documentos/produto-sem-imagem.gif" />
+                            </td>
+                            <td *ngIf="an.Produtos[0].imagems == undefined">
+                                <img (click)="detalhes(anuncio)" class="img-sm rounded-circle"
+                                src="https://saveadd.blob.core.windows.net/documentos/produto-sem-imagem.gif" />
+                            </td>
+                            <td>
+                              <a (click)="detalhes(an)"> <strong>{{an.Titulo}}</strong></a>
+                            </td>
+                            <td>                                  
+                                  
+                              <input [ngModel]="getValueRestricao(an, j)" name="quantity{{j}}"
+                                (change)="updateQuantidade($event, j, an, null)" type="number" min="{{getValueRestricao(an, j)}}"
+                                style="max-width: 60px" max="{{getMaxValueRestricao(an, j)}}">
+                              <small class="text-muted mb-0">Disponível: {{an.Produtos[0].QuantidadeEstoque}}</small>
+                            </td>
+                            <td>{{ an.Produtos[0].ValorUnitarioDesconto |  currency:'BRL':true }}</td>
+                            <td>
+                              {{ anuncios_checkout[j].TotalProd |  currency:'BRL':true }}
+                            </td>
+                            <td>
+                              <div title="Remover Produto" (click)="removeAnuncio(j)"
+                                class="badge badge-pill badge-danger remove-produto pull-right">
+                                <i class="fa  fa-trash-o"> </i>
+                              </div>
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                    <div class="col-lg-12">
+                      <div class="row" style="margin:10px">
+                        <div class="col-lg-12">
+                          <span *ngIf="empresasByAnuncio[j] != undefined" class="pull-left">Total da empresa
+                              {{empresasByAnuncio[j].NomeEmpresa}}:
+                              {{getTotalByEmpresa(an,j) | currency:'BRL'}}<br /></span>
+                        
+                          <div class="form-group">
+                              <button id="button{{j}}" (click)="completarpedido(j)" class="btn btn-success pull-right">
+                                  Avançar para Finalização
+                              </button>
+                            </div>
+                          </div>
+                      </div>
+                    </div>
+                    <div id="section{{j }}" style="display:none" class="col-lg-12">
+                      <div class="row">
+                      <div class="col-lg-6">
+                        <div class="row">
+                          <div class="col-lg-12">
+                            <div *ngIf="empresasByAnuncio.length > 0">
+                              
+                              <span [hidden]="!showFaltante" style="color: red">Faltam {{ faltante | currency:'BRL'}} para
+                                completar o valor do pedido mínimo</span>
+                                <!--div *ngFor="let rest of an.Restricoes" style="color: red"> 
+                                    <span *ngIf="rest.TipoRestricao == 1 && anuncios_checkout[j].Quantidade < rest.Valor"> A quantidade mínima do anuncio é {{rest.Valor}}</span>
+                                    <span *ngIf="rest.TipoRestricao == 2 && anuncios_checkout[j].Quantidade >  rest.Valor "> A quantidade máxima do anuncio é {{rest.Valor}} </span>
+                                  </div-->
+                            </div>
+                          </div>                          
+                        </div>
+                      </div>
+                      <div class="col-lg-6">
+                        <div class="row">
+                          
+                          </div>
+                          
+                      </div>
+                    </div>
+                    </div>
+                  </div>
+                </div>
+                <div id="section2{{j}}" style="display:none" class="col-lg-12 list-footer justify-content-start p-3">
+                <div class="row">
+                  <div class="col-md-6 form-group">
+                    <label>Comprador</label>
+                    <select *ngIf="empresas != undefined && empresas.length > 0" required name="empresa" class="form-control" [(ngModel)]="fisrtEmpresa">
+                      <option *ngFor='let empresa of empresas' [ngValue]="empresa" selected>
+                        {{empresa.NomeEmpresa}}
+                      </option>
+                    </select>
+                    <select *ngIf="empresas == undefined ||  empresas.length == 0" required name="usuario" class="form-control" [(ngModel)]="infoUser">
+                      <option *ngFor='let infoUser of users' [ngValue]="infoUser.IdUsuario"  selected>
+                        {{infoUser.NomeUsuario}}
+                      </option>
+                    </select>
+                  </div>
+                  <div *ngIf="!empresa_selecionada" class='col-md-6 form-group'>
+                    <label>Endereço de entrega</label>
+                    <select [disabled]='!empresa_selecionada' class="form-control">
+                      <option>
+                        --
+                      </option>
+                    </select>
+                  </div>
+                  <div *ngIf="empresa_selecionada" class='col-md-6 form-group'>
+                    <label>Endereço de entrega</label>
+                    <select required name="entrega" class="form-control" [(ngModel)]="entrega">
+                      <option *ngFor='let endereco of empresa_selecionada.Enderecos; let i = index'
+                        [ngValue]="endereco">
+                        {{endereco.Cidade}}, {{endereco.Bairro}}, {{endereco.Logradouro}}, {{endereco.Numero}}
+                      </option>
+                    </select>
+                  </div>
+                  <div class="col-lg-6" style="margin-bottom:10px">
+                      <label *ngIf="empresasByAnuncio[j] != undefined">Forma de Pagamento da empresa
+                        {{empresasByAnuncio[j].NomeEmpresa}}</label>
+                      <select *ngIf="empresasByAnuncio[j] != undefinedc" required name="forma_pagamento"
+                        class="form-control" (change)="pushPagamento($event.target.value, an, empresasByAnuncio[j], j)">
+                        <option value="0" selected>-- Selecione uma forma de pagamento --</option>
+                        <option *ngFor='let pagamento of empresasByAnuncio[j].FormasPagamento'
+                          [ngValue]="pagamento.IdFormaPagamento">
+                          {{pagamento.NomeFormaPagamento}}
+                        </option>
+                      </select>
+                    </div>
+                  <div class='col-lg-6 form-group'>
+                    <label>Observações</label>
+                    <textarea [disabled]="!empresa_selecionada" [(ngModel)]="observacoes" id="observacoes"
+                      name="observacoes" class="form-control" rows="5" maxlength="500"> </textarea>
+                  </div>
+                  
+                  <div class="col-lg-12 mb-2">
+                      <div class="form-group">
+                        <button (click)="makeCheckout2(an, j)" class="btn btn-success pull-right">
+                          Finalizar este pedido
+                        </button>
+                      </div>
+                    </div>                    
+                </div>
+                <div id="section3{{j}}" hidden >
+                    <h3 *ngIf="showDadosBancarios" style="color:red">Por favor mantenha a mão os seguintes dados:</h3>
+                    <div *ngIf="showDadosBancarios">
+                      <div class="row">
+                        <div class="col-lg-12">Dados de transferencia/deposito da empresa
+                          {{empresaDadosBancarios.NomeEmpresa}}</div>
+                        <div class="col-lg-12"
+                          *ngIf="empresaDadosBancarios.DadosBancarios.length == 0 || empresaDadosBancarios == undefined">
+                          Esta empresa não tem os dados bancarios atualizados</div>
+                        <div class="row" style="    padding: 16px" *ngIf="empresaDadosBancarios != undefined">
+                          <div *ngIf="empresaDadosBancarios.DadosBancarios.length > 0 " class="col-lg-4">
+                            <label>Nome da conta:</label> {{empresaDadosBancarios.DadosBancarios[0].NomeDadosBancarios }}
+                          </div>
+                          <div *ngIf="empresaDadosBancarios.DadosBancarios.length > 0 " class="col-lg-4">
+                            <label>Nome do Titular:</label> {{empresaDadosBancarios.DadosBancarios[0].NomeTitular   }}
+                          </div>
+                          <div *ngIf="empresaDadosBancarios.DadosBancarios.length > 0 " class="col-lg-4">
+                            <label>Cnpj:</label> {{empresaDadosBancarios.DadosBancarios[0].CpfCnpjTitular}}
+                          </div>
+                          <div *ngIf="empresaDadosBancarios.DadosBancarios.length > 0 " class="col-lg-4">
+                            <label>Número da Agência:</label> {{empresaDadosBancarios.DadosBancarios[0].NumeroAgencia  }}
+                          </div>
+                          <div *ngIf="empresaDadosBancarios.DadosBancarios.length > 0 " class="col-lg-4">
+                            <label>Digito da Agência:</label> {{empresaDadosBancarios.DadosBancarios[0].DigitoAgencia   }}
+                          </div>
+                          <div *ngIf="empresaDadosBancarios.DadosBancarios.length > 0 " class="col-lg-4">
+                            <label>Número da conta:</label> {{empresaDadosBancarios.DadosBancarios[0].NumeroConta }}
+                          </div>
+                          <div *ngIf="empresaDadosBancarios.DadosBancarios.length > 0 " class="col-lg-4">
+                            <label>Digito da conta:</label> {{empresaDadosBancarios.DadosBancarios[0].DigitoConta  }}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+            </div>
+            <br />
+            
+          </div>
+          
+          
+        </div>
+        
+        </form>
+        
+        </div>
+        <div class="row" *ngIf="anuncios.length>0">
+            <div class="col-lg-3  offset-lg-6 mt-2">
+                <h4 class="pull-right">Total Geral: {{ getTotal()  | currency:'BRL'}}</h4>
+              </div>
+            <div class="col-lg-3">
+                <button [routerLink]="['/vitrine']" role='button' class="btn btn-default fill">
+                  Continuar Comprando
+                </button>
+                <!--button (click)="makeCheckout();check() " role='button' class="btn btn-success">
+                  Finalizar todos os pedidos
+                </button-->
+              
+            </div>
+          </div>
+        <div class="container" *ngIf="anuncios.length < 1 ">
+          <div class="row justify-content-center">
+            <h3 class="col-lg-8" *ngIf="errorMessage.length == 0">Neste momento não existem itens no carrinho</h3>
+          </div>
+          <div class="row justify-content-center">
+
+            <div class="col-sm-3">
+              <!--h3>Você ainda não adicionou itens ao carrinho. Visite a vitrine para adicionar algo</h3-->
+              <button [routerLink]="['/vitrine']" class="btn btn-success btn-lg" style="margin-top:15px">Ir para
+                vitrine</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

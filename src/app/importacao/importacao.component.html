@@ -1,0 +1,105 @@
+<ngx-spinner 
+bdColor="rgba(51,51,51,0.8)"
+size="large"
+color="#00a99d"
+type="line-scale">
+<p style="font-size: 20px; color: #00a99d">Carregando...</p>
+</ngx-spinner>
+<div class="row">
+  <div class="col-lg-12 grid-margin">
+    <div class="card">
+      <div class="card-body">
+        <h4 class="card-title">Importação de produtos</h4>
+        <div  class="container-fluid">
+          <div class="row">
+            <div class="col-md-7">            
+              <div class="custom-file">
+                <input type="file" accept=".xlsx"  class="custom-file-input" id="customFile" lang="pt" (change)="fileChange($event)">
+                <label class="custom-file-label" for="customFile">{{filename}}</label>
+              </div>
+            </div>
+            <div class="col-md-2 " style="padding: 5px;">
+                <a  href="https://saveadd.blob.core.windows.net/documentos/SaveAdd-Exempo-Importacao-Produtos.xlsx">
+                  <i class="mdi mdi-download text-white"></i> <span >Baixar planilha</span>
+                </a>
+            </div>
+            <div class="col-md-3 ">
+                <button  class="btn btn-info btn-md fill" (click)="upload()">
+                  <i class="mdi mdi-upload text-white"></i> <span >Importar planilha</span>
+                </button>
+            </div>
+          </div>
+          <br/>
+          <div class="row">
+            <div class="col-md-12">
+            <h3>Linhas com erro</h3>
+            <table id="order-listing" class="table">
+              
+                <thead>
+                  <tr class="bg-primary text-white " >
+                    <th>#</th> 
+                    <th>Código Interno</th>
+                    <th>Nome </th>
+                    <th>Descriçao </th>
+                    <th>Categoria </th>
+                    <th>Fabricante </th>
+                    <th>Mensagem </th>
+                  </tr>
+                </thead>
+                <tbody *ngIf="itensError.length >0">
+                    <tr *ngFor="let item of itensError">
+                      <td> {{item.NumeroLinha}}</td>
+                      <td *ngIf="item.Produto.CodigoInterno != null">{{item.Produto.CodigoInterno}}</td>
+                      <td *ngIf="item.Produto.NomeProduto != null">{{item.Produto.NomeProduto}}</td>
+                      <td *ngIf="item.Produto.DescricaoProduto != undefined">{{item.Produto.DescricaoProduto}}</td>
+                      <td *ngIf="item.Produto.Categoria != null">{{getCategoriaPai(item.Produto.Categoria)}}  </td>
+                      <td *ngIf="item.Produto.Fabricante != null"> {{item.Produto.Fabricante.NomeFabricante}}</td>
+                      <td *ngIf="item.Produto.Fabricante == null">--</td>
+                      <td *ngIf="item.Mensagem != undefined"> {{item.Mensagem}}</td>                      
+                      
+                    </tr>
+                  </tbody>
+                  <div class="" *ngIf="itensError.length == 0"> sem erros</div>
+                </table>
+              </div>
+          </div>
+          <div class="row">
+            <div class="col-md-12">
+             <h3>Linhas com sucesso</h3>
+              <table id="order-listing" class="table">                
+                  <thead>
+                    <tr class="bg-primary text-white " >
+                        <th>#</th> 
+                        <th>Código Interno </th> 
+                        <th>Nome </th>
+                        <th>Descriçao </th>
+                        <th>Categoria </th>
+                        <th>Fabricante </th>
+                        <th>Açoes </th>
+                    </tr>
+                  </thead>
+                  <tbody *ngIf="itens.length >0">
+                      <tr  *ngFor="let item of itens">
+                          <td > {{item.NumeroLinha}}</td>
+                          <td *ngIf="item.Produto.CodigoInterno != null">{{item.Produto.CodigoInterno}}</td>
+                          <td *ngIf="item.Produto.NomeProduto != null">{{item.Produto.NomeProduto}}</td>
+                          <td *ngIf="item.Produto.DescricaoProduto !=null">{{item.Produto.DescricaoProduto}}</td>
+                          <td *ngIf="item.Produto.Categoria != null">{{getCategoriaPai(item.Produto.Categoria)}}  </td>
+                          <td *ngIf="item.Produto.Fabricante !=null"> {{item.Produto.Fabricante.NomeFabricante}}</td>
+                          <td *ngIf="item.Produto.CodigoInterno != null">
+                            
+                            <button  class="btn btn-info" (click)="editarCategoria(item.Produto.IdProduto)">
+                              <i class="mdi mdi-eye"></i>Editar
+                            </button>
+                          </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                  <div class="" *ngIf="itens.length == 0"> sem importaçoes</div>
+                </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

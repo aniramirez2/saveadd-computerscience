@@ -1,0 +1,89 @@
+.formRecuperarSenha{max-width: 570px; margin: 0 auto 50px;}
+.img-login{max-width: 300px; display: block; margin: 50px auto 0;}
+input {
+  border: 1px solid #CCC;
+  padding: 5px;
+}
+
+.form-control.ng-pristine.ng-invalid.ng-touched {
+  border: 1px solid red;
+}
+.required-field{
+  color: red !important;
+  font-size: smaller !important;
+}
+@media(min-width:576px){
+  .login-full-bg{
+    width: 90%
+  }
+}
+@media(max-width:376px){
+  .login-full-bg{
+    width: 110%
+  }
+}
+.img-login {
+  width: 40%;
+  margin-left: 30%;
+}
+
+.mensagemError {
+  border: 1px solid orangered;
+  padding: 15px 0;
+  text-align: center;
+  font-size: 13px;
+  text-transform: uppercase;
+  color: orangered;
+  width: 75%;
+  margin: 15px auto 0;
+  animation: fadein 2s;
+  -moz-animation: fadein 2s; /* Firefox */
+  -webkit-animation: fadein 2s; /* Safari and Chrome */
+  -o-animation: fadein 2s; /* Opera */
+}
+.mensagemSucesso {
+  border: 1px solid lightgreen;
+  padding: 15px 0;
+  text-align: center;
+  font-size: 13px;
+  text-transform: uppercase;
+  color: lightgreen;
+  width: 75%;
+  margin: 15px auto 0;
+  animation: fadein 2s;
+  -moz-animation: fadein 2s; /* Firefox */
+  -webkit-animation: fadein 2s; /* Safari and Chrome */
+  -o-animation: fadein 2s; /* Opera */
+}
+@keyframes fadein {
+  from {
+      opacity:0;
+  }
+  to {
+      opacity:1;
+  }
+}
+@-moz-keyframes fadein { /* Firefox */
+  from {
+      opacity:0;
+  }
+  to {
+      opacity:1;
+  }
+}
+@-webkit-keyframes fadein { /* Safari and Chrome */
+  from {
+      opacity:0;
+  }
+  to {
+      opacity:1;
+  }
+}
+@-o-keyframes fadein { /* Opera */
+  from {
+      opacity:0;
+  }
+  to {
+      opacity: 1;
+  }
+}

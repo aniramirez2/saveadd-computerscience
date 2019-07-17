@@ -1,0 +1,29 @@
+:host {
+    width: 100%;
+    .loader-demo-box {
+        border: none !important;
+        .bar-loader {
+            span {
+                background-color: rgba(0, 134, 249, 0.7);
+            }
+        }
+    }
+    .inner {
+        // width: 100%;
+        margin-left: 0px;
+        margin-right: 0px;
+        .loader-demo-box {
+            height: unset;
+            max-height: 100%;
+            width: 100%;
+            .bar-loader {
+                width: 30px;
+                height: 30px;
+                span {
+                    background-color: #ff9800;
+                    height: 20px;
+                }
+            }
+        }
+    }
+}

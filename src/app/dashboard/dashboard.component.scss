@@ -1,0 +1,63 @@
+.card {
+    .card-body {
+        padding: 0.5rem 1.81rem;
+        .flex-row {
+            align-items: center;
+        }
+    }
+
+    &.card-produtos {
+        background-color: #ff9800;
+        border-color: #ff8600;
+        .icon {
+            color: #d36f00;
+        }
+    }
+
+    &.card-anuncios {
+        background-color: #09b76b;
+        border: #04b96a;
+        .icon {
+            color: #038b50;
+        }        
+    }
+
+    &.card-pedidos {
+        background-color: #ab8ce4;
+        border-color: #a17fe0;
+        .icon {
+            color: #956ce2;
+        }
+    }
+
+    &.card-vendas {
+        background-color: #1094f7;
+        border-color: #048ef6;
+        .icon {
+            color: #026fc1;
+        }
+    }
+
+    .icon {
+        font-size: 54px;
+    }
+
+    .info {
+        text-align: -webkit-center;
+        margin-left: 8%;
+        color: #fff;
+        width: 100%;
+        span {
+            font-size: 45px;
+        }
+        .link {
+            font-size: 12px;
+            text-align: -webkit-right;
+            cursor: pointer;
+            i {
+                font-size: 8px;
+            }
+        }
+    }
+}
+

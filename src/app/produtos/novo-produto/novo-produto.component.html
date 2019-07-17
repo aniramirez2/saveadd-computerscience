@@ -1,0 +1,186 @@
+<ngx-spinner bdColor="rgba(51,51,51,0.8)" size="large" color="#00a99d" type="line-scale">
+  <p style="font-size: 20px; color: #00a99d">Carregando...</p>
+</ngx-spinner>
+<div class="row">
+  <div class="col-lg-12 grid-margin stretch-card">
+
+    <form #newProduct="ngForm" name="userRegistrationForm" class="forms-sample" novalidate style="width: 100%">
+      <ngb-alert *ngIf="successMessage" type="success" (close)="successMessage = null">{{ successMessage }}</ngb-alert>
+
+      <div class="card">
+        <div class="card-body">
+          <h4 class="card-title"> Cadastrar Produto</h4>
+          <div class="container">
+            <div class="row">
+              <div class="col-sm-4 form-group">
+                <label for="code-type">Categoria</label>
+
+                <select required [disabled]="onlyCategories == null" name="category" class="form-control" #s
+                  [ngModel]="onlyCategories" (change)="selectedCategory($event.target.value)">
+                  <option *ngFor='let cat of onlyCategories' [ngValue]="cat.IdCategoria">
+                    {{cat.NomeCategoria}}
+                  </option>
+                  <option class="newCat" value="nc">
+                    + Outra/Nova Categoria
+                  </option>
+                </select>
+              </div>
+              <!--div class="form-group col-sm-4">
+                <label for="category">Selecione:</label>
+                <ng-template #rt let-r="result" let-t="term">
+                  <span>{{r.NomeCategoria}}</span>
+                </ng-template>
+                <input name="category" id="category" type="text" class="form-control" [(ngModel)]="model" [ngbTypeahead]="search" (focus)="focus$.next($event.target.value)"
+                  (click)="click$.next($event.target.value)" #instance="ngbTypeahead" [inputFormatter]="category_formatter"
+                  [editable]="false" [resultTemplate]="rt" (selectItem)="selectedCategory($event)" placeholder="Selecione uma categoria"
+                />
+              </div-->
+              <div class='col-md-4 form-input'>
+                <div class="form-group">
+                  <label for="code-type">Subcategoria</label>
+
+                  <select required [disabled]="subcategories == null" name="subcat" class="form-control" #s
+                    [ngModel]="model2" (change)="saveSubcategory(s.value);">
+                    <option *ngFor='let sub of subcategories' [ngValue]="sub.IdCategoria">
+                      {{sub.NomeCategoria}}
+                    </option>
+                    <option class="newCat" value="ns">
+                      + Outra/Nova Subcategoria
+                    </option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="col-md-4">
+                <div class="form-group">
+                  <label for="manufacturer">Fabricante</label>
+                  <!-- <input [ngModel]="product.manufacturer" (ngModelChange)="product.manufacturer=$event" id="manufacturer" name="manufacturer"
+                    class="form-control"> -->
+
+                  <ng-template #rtFabricante let-r="result" let-t="term">
+                    <span>{{r.NomeFabricante}}</span>
+                  </ng-template>
+                  <input #rawFabricante name="fabricante" id="fabricante" type="text" class="form-control"
+                    [(ngModel)]="fabricante" [ngbTypeahead]="searchFabricante"
+                    (focus)="focusFabricante.next($event.target.value)"
+                    (click)="clickFabricante.next($event.target.value)" #thFabricante="ngbTypeahead"
+                    [inputFormatter]="fabricante_formatter" (ngModelChange)="newFabricante($event)" [editable]="false"
+                    [resultTemplate]="rtFabricante" (selectItem)="selectFabricante($event)" placeholder="Fabricante" />
+                </div>
+                <!-- <p>Fabricante: {{fabricante?.NomeFabricante}}</p> -->
+              </div>
+              <div class="col-md-4" *ngIf="showNewCat">
+                <div class="form-group">
+                  <label for="nc">Outra/Nova Categoria</label>
+                  <input [ngModel]="nc" (ngModelChange)="nc=$event" id="nc" name="nc" class="form-control">
+                </div>
+              </div>
+              <div class="col-md-4" *ngIf="showNewCat || showNewSub">
+                <div class="form-group">
+                  <label for="nc">Outra/Nova Subcategoria</label>
+                  <input [ngModel]="ns" id="ns" (ngModelChange)="ns=$event" name="ns" class="form-control">
+                </div>
+              </div>
+              <div class="col-md-4" *ngIf="showNewCat || showNewSub" style="margin-top: 25px;">
+                <button (click)="saveNewCat()" class="btn btn-success mr-2 ">
+                  <span>
+                    Salvar Sugestões
+                  </span>
+                </button>
+              </div>
+            </div>
+
+
+            <div class="product-info row" *ngIf="hasSubcategory">
+              <div class="col-sm-12">
+                <h4>Dados do Produto</h4>
+              </div>
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label for="name">Nome</label>
+                  <input [ngModel]="product.name" (ngModelChange)="product.name=$event" required id="name" name="name"
+                    class="form-control">
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label for="name">Código Interno</label>
+                  <input [ngModel]="product.codigoInterno" (ngModelChange)="product.codigoInterno=$event" required
+                    id="codigoInterno" name="codigoInterno" class="form-control">
+                </div>
+              </div>
+
+              <div class="col-md-12">
+                <div class="form-group">
+                  <label for="description">Descrição (interna - não é exibida na vitrine)</label>
+                  <textarea [ngModel]="product.description" required (ngModelChange)="product.description=$event"
+                    id="description" name="description" class="form-control" rows="3"> </textarea>
+                </div>
+              </div>
+            </div>
+
+            <div class="row" *ngIf="hasSubcategory">
+              <div class="col-sm-12">
+                <h4>Código</h4>
+              </div>
+
+              <!-- <div class="col-md-6">
+                <div class="form-group">
+                  <label for="code-type">Tipo de Código</label>
+                  <input [ngModel]="product.code_type" required (ngModelChange)="product.code_type=$event" id="code-type" name="code_type"
+                    class="form-control">
+                </div>
+              </div> -->
+
+              <div class='col-md-6 form-input'>
+                <div class="form-group">
+                  <label for="code-type">Tipo de Código</label>
+
+                  <select name="code_type" class="form-control" [ngModel]="product.code_type" #cod
+                    (change)="onChangeCodigo(cod.value)">
+                    <option *ngFor='let codigo of tipos_codigo' [ngValue]="codigo.id">
+                      {{codigo.nome}}
+                    </option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label for="code">Código de Barras</label>
+                  <input [ngModel]="product.code" required (ngModelChange)="product.code=$event" id="code" name="code"
+                    class="form-control">
+                </div>
+              </div>
+            </div>
+
+            <!--div class="row" *ngIf="category">
+
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label for="code-type">Número do Lote</label>
+                  <input [ngModel]="lote.NumeroLote" (ngModelChange)="lote.NumeroLote=$event" id="numero-lote" name="numero-lote" class="form-control">
+                </div>
+              </div>
+            </div-->
+          </div>
+
+
+
+          <div class="container">
+            <div class="row d-flex justify-content-end">
+              <!-- <button class="btn btn-light">Cancelar</button> -->
+              <button (click)="createProduct()" [disabled]=" saving || !newProduct.form.valid || !category"
+                type="submit" class="btn btn-success mr-2 ">
+                <span *ngIf="!saving">
+                  Salvar
+                </span>
+                <app-loader *ngIf="saving" [type]="'inner'"></app-loader>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

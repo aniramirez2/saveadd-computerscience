@@ -1,0 +1,34 @@
+.return {
+    margin-bottom: 2rem;
+}
+.mr-10{
+    margin-left: 20px
+}
+.empresa-name {
+    color: #46a79a;
+    &:hover {
+        cursor: pointer;
+    }
+}
+.fill{
+    width: stretch
+}
+.pull-rigth{
+    float: right
+}
+.m-b-30{
+    margin-bottom: 30px
+}
+.add-filial,
+.edit-empresa,
+.remove-filial {
+    &:hover {
+        cursor: pointer;
+    }
+}
+
+.row {
+    .endereco {
+        margin-left: 0;
+    }
+}

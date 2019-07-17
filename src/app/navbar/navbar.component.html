@@ -1,0 +1,47 @@
+<nav class="navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row navbar-success">
+  <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-center">
+    <a class="navbar-brand brand-logo" routerLink="/dashboard">
+      <img src="assets/images/logo.svg" alt="logo" />
+    </a>
+    <a class="navbar-brand brand-logo-mini" routerLink="/dashboard">
+      <img src="assets/images/icon.png" alt="logo" />
+    </a>
+  </div>
+  <div class="navbar-menu-wrapper d-flex align-items-stretch">
+    <ul class="navbar-nav">
+      <li class="nav-item">
+        <form class="nav-link form-inline mt-2 mt-md-0 d-none d-lg-flex search">
+          <input type="text" class="form-control" placeholder="Pesquisar..." *ngIf="notLoggedIn">
+        </form>
+      </li>
+    </ul>
+    <ul class="navbar-nav navbar-nav-right">
+      <li  class="nav-item dropdown" ngbDropdown *ngIf="auth.isAuthenticated()">
+        <a *ngIf="!isAdmin" routerLink="/carrinho" class="nav-link count-indicator dropdown-toggle" id="messageDropdown" ngbDropdownToggle>
+          <i class="fa fa-shopping-cart"></i>
+          <span class="count bg-warning">{{total_carrinho}}</span>
+        </a>
+      </li>
+      <li class="nav-item dropdown" ngbDropdown>
+        <a class="nav-link dropdown-toggle nav-profile" id="profileDropdown" ngbDropdownToggle *ngIf="auth.isAuthenticated()">
+          
+          <span class="d-none d-lg-inline" style="cursor:pointer">{{user_name}}</span>
+        </a>
+        <div class="dropdown-menu navbar-dropdown w-100" ngbDropdownMenu aria-labelledby="profileDropdown">
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" routerLink="/editar">
+            <i class="mdi mdi-account mr-2 text-primary"></i>
+            Editar Perfil
+          </a>
+          <a class="dropdown-item" (click)="logout()">
+            <i class="mdi mdi-logout mr-2 text-primary"></i>
+            Sair
+          </a>
+        </div>
+      </li>
+    </ul>
+    <button class="navbar-toggler navbar-toggler-right d-lg-none align-self-center" type="button" (click)="toggleOffcanvas()">
+      <span class="mdi mdi-menu"></span>
+    </button>
+  </div>
+</nav>

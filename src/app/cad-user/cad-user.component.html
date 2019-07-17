@@ -1,0 +1,500 @@
+
+ <div class="row justify-content-md-center m-t">
+  <div class="col-md-8">
+    <div class="forms-sample">
+      <form #registerForm="ngForm">
+        <div class="card grid-margin">
+          <div class="col-sm-12 bg-white">
+            <img src="assets/images/logo.svg" class="img-login" alt="Sistema Saveadd" />
+          </div>
+          <div class="container">
+            <div class="card-body row">
+              <div class="col-sm-12">
+                <h4 class="card-title">Dados do Representante</h4>
+              </div>
+              <div class="col-sm-12 col-md-8 ">
+                <div class="form-group">
+                  <label for="nome_usuario" class="control-label">Nome</label>
+                  <input required [(ngModel)]="user.NomeUsuario" #name="ngModel" name="nome_usuario" class="form-control input-md" placeholder="Nome"
+                    type="text">
+                  <div class="alert alert-danger" [hidden]="name.valid || name.pristine">Seu nome é obrigatório</div>
+
+                </div>
+              </div>
+              <div class="col-sm-12 col-md-4 ">
+                <div class="form-group">
+                  <label for="cpf" class="control-label">CPF</label>
+                  <input required [textMask]="{mask: masks.cpf}" #cpf="ngModel" [(ngModel)]="user.Cpf" name="cpf" class="form-control input-md"
+                    placeholder="CPF" type="text">
+                  <div class="alert alert-danger" [hidden]="cpf.valid || cpf.pristine">CPF é obrigatório</div>
+                </div>
+              </div>
+
+              <div class='col-sm-12 col-md-8'>
+                <div class="form-group">
+                  <label class="control-label" for="email">Email</label>
+                  <input email [(ngModel)]="user.Email" #email="ngModel" required name="email" class="form-control input-md" type="email" placeholder="Email">
+                  <div class="alert alert-danger" [hidden]="email.valid || email.pristine">Email é obrigatório</div>
+                </div>
+              </div>
+              <div class='col-sm-12 col-md-4'>
+                <div class="form-group">
+                  <label class="control-label" for="DataNascimento">Data Nascimento</label>
+                  <input [(ngModel)]="user.DataNascimento" #birthday="ngModel" name="dataNascimento" class="form-control input-md" type="date" required>
+                  <div class="alert alert-danger" [hidden]="birthday.valid || birthday.pristine">Data de nascimento é obrigatório</div>
+                </div>
+              </div>
+
+              <div class='col-sm-6'>
+                <div class="form-group">
+                  <label class="control-label" for="Senha">Senha</label>
+                  <input required minlength="6" [(ngModel)]="user.Senha" class="form-control input-md" #password="ngModel" name="Senha" type="password"
+                    placeholder="Pelo menos 6 caracteres">
+                  <div class="alert alert-danger" [hidden]="password.valid || password.pristine">Senha é obrigatório</div>
+                </div>
+              </div>
+              <div class="col-sm-6">
+                <div class="form-group">
+                  <label class="control-label" for="ConfirmarSenha">Confirmar Senha</label>
+                  <input [(ngModel)]="confirm_password" class="form-control input-md" #confirmation="ngModel" required name="confirm-password"
+                    type="password" placeholder="Confirmar Senha">
+                  <div class="alert alert-danger" [hidden]="confirmation.valid || confirmation.pristine">Confirmar Senha é obrigatório</div>
+                  <div class="alert alert-danger" *ngIf="confirm_password && confirm_password != user.Senha">Senha e Confirmar não são iguais</div>
+                </div>
+              </div>
+              <!--div class="col-md-12">
+                  <label for="manufacturer">Quais itens voce teria mais preferencia em comprar?</label>
+                  <ng-select class="form-control" #select
+                        [items]="categorias | async"
+                        [multiple]="true"
+                        [closeOnSelect]="false"
+                        [searchable]="true"
+                        bindLabel= "NomeInteresse"
+                        bindValue="IdInteresse"
+                        [(ngModel)]="selectedPeople1"
+                        [ngModelOptions]="{standalone: true}"
+                        (add)="addInteresses($event)"
+                        (remove)="jobsDeselected($event)">
+                </ng-select>
+              </div-->
+            </div>
+          </div>
+          <div class="container">
+            <div class="row card-body">
+              <div class="col-sm-12 m-t-title">
+                <h4 class="card-title" *ngIf="is_cnpj">Dados da Empresa</h4>
+                
+                <div *ngIf="!is_cnpj" style="display:flex">
+                  <h4 class="card-title" >Endereço </h4>
+                               
+                </div>
+              </div>
+            </div>
+            <div class="row card-body" *ngIf="is_cnpj">
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label class="control-label" for="CNPJ">CNPJ</label>
+                  <div class="input-group mb-3">
+                    <input [textMask]="{mask: masks.cnpj}" [(ngModel)]="searched_cnpj" class="form-control input-md" name="cnpj" type="text"
+                      placeholder="CNPJ" required>
+                    <div class="input-group-prepend">
+                      <button [disabled]="!searched_cnpj || searched_cnpj.length < 18" (click)="buscaEmpresaOnReceita()" class="btn btn-success"
+                        type="button">Avançar</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6">
+                  <div class="form-group input-group-prepend"  style="margin-top:23px">
+                      <button class="btn btn-info"   (click)="searchCep()">Não tenho um CNPJ</button>
+                  </div>
+              </div>
+            </div>
+            <ng-template [ngIf]="isCnpjInvalid">
+              <div class="alert alert-danger mensagem-valida-cnpj col-md-6">Favor informar um CNPJ Válido!</div>
+            </ng-template>
+            <app-loader *ngIf="searching"></app-loader>
+
+            <div class="row card-body" *ngIf="empresa.Cnpj && !searching && is_cnpj">
+            <!--div class="row" hidden-->
+              <!-- Estes campos abaixos serão preenchidos atraves da requisição da api da Receita Federal, já serão mostrados preenchidos mas desabilitados para edição -->
+              <div class="col-md-6 form-group">
+                <label class="control-label" for="NomeEmpresa">Nome Fantasia</label>
+                <input [(ngModel)]="empresa.NomeEmpresa" class="form-control input-md" required name="NomeEmpresa" type="text" #nome_empresa="ngModel"
+                  placeholder="Nome Fantasia">
+                <div class="alert alert-danger" [hidden]="nome_empresa.valid || nome_empresa.pristine">Campo Nome Fantasia é obrigatório</div>
+              </div>
+
+              <div class='col-md-6 form-group'>
+                <label class="control-label" for="RazaoSocial">Razão Social</label>
+                <input [(ngModel)]="empresa.RazaoSocial" class="form-control input-md" required name="RazaoSocial" type="text" #raz_social="ngModel"
+                  placeholder="Razao Social" disabled>
+                <div class="alert alert-danger" [hidden]="raz_social.valid || raz_social.pristine">Campo Razão Social é obrigatório</div>
+              </div>
+
+              <div class="col-md-5">
+                <div *ngIf="iEchecado" class="row">
+                  <div class='col-xs-12 col-md-5 form-group'>
+                    <label>I.E Isento?
+                      <input class="d-block mt-3" #iEchecado type="checkbox" name="size" (change)="0" value="isento">
+                    </label>
+                  </div>
+                  <div class='col-xs-12 col-md-7 form-group'>
+                    <div *ngIf="!iEchecado.checked">
+                      <label class="control-label" for="insc-stadual">Inscrição Estadual</label>
+                      <input [(ngModel)]="empresa.InscricaoEstadual" ng-show="iEstadual" class="form-control input-md" name="insc-stadual" type="text" #insc_estatual="ngModel" placeholder="Inscricao Estadual" maxlength="12">
+                    </div>
+                    <div *ngIf="iEchecado.checked">
+                        <label class="control-label" for="insc-stadual">Inscrição Estadual</label>
+                        <input [(ngModel)]="empresa.InscricaoEstadual" disabled class="form-control input-md" name="insc-stadual" type="text" value="Isento"placeholder="Isento">
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class='col-md-3 form-group'>
+                <label class="control-label" for="Tipo Empresa">Tipo Empresa</label>
+                <input [(ngModel)]="empresa.TipoEmpresa" disabled class="form-control input-md" required name="tipo-empresa" type="text"
+                  placeholder="Tipo Empresa">
+              </div>
+
+              <div class='col-md-4 form-group' *ngIf="empresa.Enderecos != undefinded">
+                <label class="control-label" for="CEP">CEP</label>
+                <input #cep="ngModel" [(ngModel)]="empresa.Enderecos[0].Cep" class="form-control input-md" required disabled name="CEP" type="text"
+                  placeholder="CEP">
+                <div [hidden]="cep.valid || cep.pristine" class="alert alert-danger">CEP é obrigatório</div>
+              </div>
+              <div class="col-sm-12">
+                <div class="row">
+                  <div class='col-md-9 form-group' *ngIf="empresa.Enderecos != undefinded">
+                    <label class="control-label" for="Logradouro">Logradouro</label>
+                    <input #logradouro="ngModel" [(ngModel)]="empresa.Enderecos[0].Logradouro"  disabled class="form-control input-md" required name="Logradouro"
+                      type="text" placeholder="Logradouro">
+                    <div class="alert alert-danger" [hidden]="logradouro.valid || logradouro.pristine">Logradouro é obrigatório</div>
+                  </div>
+
+                  <div class='col-md-3 form-group' *ngIf="empresa.Enderecos != undefinded">
+                    <label class="control-label" for="Numero">Número</label>
+                    <input #num_endereco="ngModel" [(ngModel)]="empresa.Enderecos[0].Numero" disabled class="form-control input-md" required name="Numero"
+                      type="text" placeholder="Numero">
+                    <div class="alert alert-danger" [hidden]="num_endereco.valid || num_endereco.pristine">Numero é obrigatório</div>
+                  </div>
+
+                  <div class='col-md-4 form-group' *ngIf="empresa.Enderecos != undefinded">
+                    <label class="control-label" for="Complemento">Complemento</label>
+                    <input disabled #complemento="ngModel" [(ngModel)]="empresa.Enderecos[0].Complemento" class="form-control input-md" name="Complemento"
+                      type="text" placeholder="Complemento">
+                  </div>
+
+                  <div class='col-md-3 form-group' *ngIf="empresa.Enderecos != undefinded">
+                    <label class="control-label" for="Cidade">Cidade</label>
+                    <input disabled #cidade="ngModel" [(ngModel)]="empresa.Enderecos[0].Cidade" class="form-control input-md" required name="Cidade" type="text"
+                      placeholder="Cidade">
+                    <div class="alert alert-danger" [hidden]="cidade.valid || cidade.pristine">Cidade é obrigatório</div>
+                  </div>
+
+                  <div class='col-md-3 form-group' *ngIf="empresa.Enderecos != undefinded">
+                    <label class="control-label" for="Bairro">Bairro</label>
+                    <input disabled #bairro="ngModel" [(ngModel)]="empresa.Enderecos[0].Bairro" class="form-control input-md" required name="Bairro" type="text"
+                      placeholder="Bairro">
+                    <div class="alert alert-danger" [hidden]="bairro.valid || bairro.pristine">Bairro é obrigatório</div>
+                  </div>
+
+                  <div class='col-md-2 form-group'>
+                    <label class="control-label" for="state">Estado</label>
+                    <input disabled #estado="ngModel" [(ngModel)]="auxEstado" class="form-control input-md" required name="state" type="text"
+                      placeholder="Estado">
+                    <div class="alert alert-danger" [hidden]="estado.valid || estado.pristine">Estado é obrigatório</div>
+                  </div>
+                  <div class="col-md-6 form-group" style="display:flex">
+                    <label style="font-weight: bold">Sua empresa é uma ONG/OS/OSC/OSCIP?</label>
+                    <div class="radio" style="margin-left:8px">
+                      <label><input type="radio" name="optradio" value="1" #radio1 (click)="setTipoEmpresa(radio1.value)">Sim</label>
+                    </div>
+                    <div class="radio" style="margin-left:10px">
+                      <label><input type="radio" name="optradio" #radio2 (click)="setTipoEmpresa(radio2.value)" value="2">Não</label>
+                    </div>
+                  </div>
+                  <div *ngIf="is_ong" class="col-md-6 form-group" style="display:flex">
+                      <label style="font-size:9pt; margin-top: 3px;">É conveniada ao Municipio, Estado ou Federação?</label>
+                      <div class="radio" style="margin-left:8px">
+                        <label><input type="radio" name="optradio1" value="1" #radio1 (click)="setTipoEmpresaConveniada(radio1.value)">Sim</label>
+                      </div>
+                      <div class="radio" style="margin-left:10px">
+                        <label><input type="radio" name="optradio1" #radio2 (click)="setTipoEmpresaConveniada(radio2.value)" value="2">Não</label>
+                      </div>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+            <div class="row card-body" *ngIf="manualCnpj && is_cnpj">
+
+            <!--div class="row"-->
+              <!-- Estes campos abaixos serão preenchidos manualmente em caso que a api da receita nao funcione -->
+              <div class="col-md-6 form-group">
+                <label class="control-label" for="NomeEmpresa">Nome Fantasia</label>
+                <input [(ngModel)]="empresa.NomeEmpresa" class="form-control input-md" required name="NomeEmpresa" type="text" #nome_empresa="ngModel"
+                  placeholder="Nome Fantasia">
+                <!--div class="alert alert-danger" [hidden]="nome_empresa.valid || nome_empresa.pristine">Campo Nome Fantasia é obrigatório</div-->
+              </div>
+
+              <div class='col-md-6 form-group'>
+                <label class="control-label" for="RazaoSocial">Razão Social</label>
+                <input [(ngModel)]="empresa.RazaoSocial" class="form-control input-md"  name="RazaoSocial" type="text" #raz_social="ngModel"
+                  placeholder="Razao Social" >
+                <!--div class="alert alert-danger" [hidden]="raz_social.valid || raz_social.pristine">Campo Razão Social é obrigatório</div-->
+              </div>
+
+              <div class="col-md-5">
+                <div  class="row">
+                  <div class='col-xs-12 col-md-5 form-group'>
+                    <label>I.E Isento?
+                      <input class="d-block mt-3" type="checkbox" name="size" (change)="checkIe($event)" value="isento">
+                      
+                    </label>
+                  </div>
+                  <div class='col-xs-12 col-md-7 form-group'>
+                    <div *ngIf="iEchecado == true">
+                      <label class="control-label" for="insc-stadual">Inscrição Estadual</label>
+                      <input [(ngModel)]="empresa.InscricaoEstadual" ng-show="iEstadual" class="form-control input-md" name="insc-stadual" type="text" #insc_estatual="ngModel" placeholder="Inscricao Estadual" maxlength="12">
+                    </div>
+                    <div *ngIf="iEchecado == false">
+                        <label class="control-label" for="insc-stadual">Inscrição Estadual</label>
+                        <input [(ngModel)]="empresa.InscricaoEstadual"  class="form-control input-md" name="insc-stadual" type="text" value="Isento"placeholder="Isento">
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div hidden class='col-md-3 form-group'>
+                <label class="control-label" for="Tipo Empresa">Tipo Empresa</label>
+                <input [(ngModel)]="empresa.TipoEmpresa" class="form-control input-md"  name="tipo-empresa" type="text"
+                  placeholder="Tipo Empresa" ngValue="0">
+              </div>
+
+              <div class='col-md-6 form-group' *ngIf="empresa.Enderecos != undefinded">
+                <label class="control-label" for="CEP">CEP</label>
+                <input #cep="ngModel" [(ngModel)]="empresa.Enderecos[0].Cep" class="form-control input-md"   name="CEP" type="text"
+                  placeholder="CEP">
+                <!--div [hidden]="cep.valid || cep.pristine" class="alert alert-danger">CEP é obrigatório</div-->
+              </div>
+              <div class="col-sm-12">
+                <div class="row">
+                  <div class='col-md-9 form-group' *ngIf="empresa.Enderecos != undefinded">
+                    <label class="control-label" for="Logradouro">Logradouro</label>
+                    <input #logradouro="ngModel" [(ngModel)]="empresa.Enderecos[0].Logradouro"  class="form-control input-md"  name="Logradouro"
+                      type="text" placeholder="Logradouro">
+                    <!--div class="alert alert-danger" [hidden]="logradouro.valid || logradouro.pristine">Logradouro é obrigatório</div-->
+                  </div>
+
+                  <div class='col-md-3 form-group' *ngIf="empresa.Enderecos != undefinded">
+                    <label class="control-label" for="Numero">Número</label>
+                    <input #num_endereco="ngModel" [(ngModel)]="empresa.Enderecos[0].Numero"  class="form-control input-md"  name="Numero"
+                      type="text" placeholder="Numero">
+                    <!--div class="alert alert-danger" [hidden]="num_endereco.valid || num_endereco.pristine">Numero é obrigatório</div-->
+                  </div>
+
+                  <div class='col-md-4 form-group' *ngIf="empresa.Enderecos != undefinded">
+                    <label class="control-label" for="Complemento">Complemento</label>
+                    <input  #complemento="ngModel" [(ngModel)]="empresa.Enderecos[0].Complemento" class="form-control input-md" name="Complemento"
+                      type="text" placeholder="Complemento">
+                  </div>
+
+                  <div class='col-md-3 form-group' *ngIf="empresa.Enderecos != undefinded">
+                    <label class="control-label" for="Cidade">Cidade</label>
+                    <input  #cidade="ngModel" [(ngModel)]="empresa.Enderecos[0].Cidade" class="form-control input-md"  name="Cidade" type="text"
+                      placeholder="Cidade">
+                    <!--div class="alert alert-danger" [hidden]="cidade.valid || cidade.pristine">Cidade é obrigatório</div-->
+                  </div>
+
+                  <div class='col-md-3 form-group' *ngIf="empresa.Enderecos != undefinded">
+                    <label class="control-label" for="Bairro">Bairro</label>
+                    <input  #bairro="ngModel" [(ngModel)]="empresa.Enderecos[0].Bairro" class="form-control input-md"  name="Bairro" type="text"
+                      placeholder="Bairro">
+                    <!--div class="alert alert-danger" [hidden]="bairro.valid || bairro.pristine">Bairro é obrigatório</div-->
+                  </div>
+
+                  <div class='col-md-2 form-group'>
+                    <label class="control-label" for="state2">Estado</label>
+                      <select  name="state2" class="form-control" #state="ngModel"  [(ngModel)]="address.Estado"  (change)="selectState2(state.value , i)">
+                        <option  *ngFor="let estado of estados" [ngValue]="estado.IdEstado">
+                          {{ estado.NomeEstado }}
+                        </option>
+                      </select>
+                    <!--div class="alert alert-danger" [hidden]="estado.valid || estado.pristine">Estado é obrigatório</div-->
+                  </div>
+
+                </div>
+              </div>
+              <div class="col-md-6 form-group" style="display:flex">
+                <label style="font-weight: bold">Sua empresa é uma ONG/OS/OSC/OSCIP?</label>
+                <div class="radio" style="margin-left:8px">
+                  <label><input type="radio" name="optradio" value="1" #radio1 (click)="setTipoEmpresa(radio1.value)">Sim</label>
+                </div>
+                <div class="radio" style="margin-left:10px">
+                  <label><input type="radio" name="optradio" #radio2 (click)="setTipoEmpresa(radio2.value)" value="2">Não</label>
+                </div>
+              </div>
+              <div *ngIf="is_ong" class="col-md-6 form-group" style="display:flex">
+                  <label style="font-size:9pt; margin-top: 3px;">É conveniada ao Municipio, Estado ou Federação?</label>
+                  <div class="radio" style="margin-left:8px">
+                    <label><input type="radio" name="optradio1" value="1" #radio1 (click)="setTipoEmpresaConveniada(radio1.value)">Sim</label>
+                  </div>
+                  <div class="radio" style="margin-left:10px">
+                    <label><input type="radio" name="optradio1" #radio2 (click)="setTipoEmpresaConveniada(radio2.value)" value="2">Não</label>
+                  </div>
+              </div>
+            </div>
+            <div class="row card-body" *ngIf="!is_cnpj">
+                  <div class="form-group col-sm-12">
+                      <label>Nome</label>
+                    <input class="form-control" required name="nome" [(ngModel)]="address.NomeEndereco" >
+                  </div>
+                  <div class="form-group col-sm-2">
+                    <label>CEP</label>
+                    <input class="form-control" required name="raz-social" [(ngModel)]="address.Cep" (ngModelChange)="findAddress()">
+                  </div>
+                  <div class="form-group col-sm-8">
+                    <label>Logradouro</label>
+                    <input class="form-control" required name="logradouro" [(ngModel)]="address.Logradouro">
+                  </div>
+                  <div class="form-group col-sm-2">
+                    <label>Número</label>
+                    <input class="form-control" required name="numero" [(ngModel)]="address.Numero">
+                  </div>
+                  <div class="form-group col-sm-4">
+                    <label>Complemento</label>
+                    <input class="form-control" name="complemento" [(ngModel)]="address.Complemento">
+                  </div> 
+                  <div class="form-group col-sm-4">
+                    <label>Bairro</label>
+                    <input class="form-control" required name="bairro" [(ngModel)]="address.Bairro">
+                  </div>
+                  <div class="form-group col-sm-4">
+                    <label>Cidade</label>
+                    <input class="form-control" required name="cidade" [(ngModel)]="address.Cidade">
+                  </div>
+                  <div class="form-group col-sm-3">
+                    <label>Estado</label>
+                    <select #t  name="estado" class="form-control" [ngModel]="address.Estado"  (change)="selectState(t.value)">
+                      <option disabled selected  [value]="address.Estado"></option>
+                      <option  *ngFor="let es of estados" [ngValue]="es.IdEstado">
+                        {{es.NomeEstado}}
+                      </option>
+                    </select>
+                  </div>
+                  <div class='col-md-3'>
+                      <div class="form-group">
+                        <label class="control-label" for="Area">DDD</label>
+                        <input [(ngModel)]="telefoneAux.Area" class="form-control input-md" required name="Area" placeholder="Area">
+                      </div>
+                    </div>
+                    <div class='col-md-6'>
+                      <div class="form-group">
+                        <label class="control-label" for="NumeroTel">Telefone</label>
+                        <input [(ngModel)]="telefoneAux.Numero" class="form-control input-md" required name="NumeroTel" type="tel" placeholder="Telefone">
+                      </div>
+                    </div>
+                    <div class="col-md-5 offset-md-1" *ngIf="!is_cnpj">
+                        <button *ngIf="!is_cnpj" class="btn btn-info fill" (click)="is_cnpj = true">Voltar para o Cadastro de CNPJ</button> 
+                    </div>
+                    <div class="col-md-3">
+                        <a class="btn btn-danger fill" title="" href="/">Voltar ao Login</a>
+                    </div>
+                    <div class="col-md-3">
+                      <button (click)="register()"
+                        class="btn btn-success  fill">
+                        <span *ngIf="!saving">
+                          Solicitar cadastro
+                        </span>
+                        <app-loader *ngIf="saving" [type]="'inner'"></app-loader>
+                      </button>
+                    </div>
+            </div> 
+                      
+          </div>
+          <div class="container"  *ngIf="empresa.Telefones.length > 0 && is_cnpj || manualCnpj">
+            <div class="row card-body">
+              <div class="col-md-12 m-t-title">
+                <h4 class="card-title">Intenções de uso</h4>
+              </div>
+            </div>
+            <div class="row dadosComerciais card-body">
+                  <div class="col-sm-3"  *ngFor="let item of intencoes">
+                    <input *ngIf="item.IdIntencao != 4 && !is_ong" type="checkbox" [value]="item.idIntencao" [checked]="item.isChecked"
+                    (change)="selectedItem(item,$event)"/> <span *ngIf="item.IdIntencao != 4 && !is_ong">{{item.NomeIntencao}}</span>
+                  
+                    <input type="checkbox" *ngIf="is_ong" [value]="item.idIntencao" [checked]="item.isChecked"
+                    (change)="selectedItem(item,$event)"/> <span *ngIf="is_ong">{{item.NomeIntencao}}</span>
+                  </div>             
+            </div>
+          </div>
+          <div class="container" *ngIf="empresa.Telefones.length > 0 && is_cnpj || manualCnpj">
+            <div class="row card-body">
+              <div class="col-md-12 m-t-title">
+                <h4 class="card-title ">Dados para Contato</h4>
+              </div>
+            </div>
+            <div class="row dadosComerciais card-body">
+              <div class='col-sm-2'>
+                <div class="form-group">
+                  <label class="control-label" for="Area">DDD</label>
+                  <input *ngIf="empresa.Telefones" [(ngModel)]="empresa.Telefones[0].Area" class="form-control input-md" required name="Area" placeholder="Area">
+                </div>
+              </div>
+              <div class='col-md-3'>
+                <div class="form-group">
+                  <label class="control-label" for="NumeroTel">Telefone</label>
+                  <input [(ngModel)]="empresa.Telefones[0].Numero" class="form-control input-md" required name="NumeroTel" type="tel" placeholder="Telefone">
+                </div>
+              </div>
+              <div class='col-sm-2'>
+                <div class="form-group">
+                  <label class="control-label" for="Ramal">Ramal</label>
+                  <input [(ngModel)]="empresa.Telefones[0].Ramal" class="form-control input-md" name="Ramal" type="text" placeholder="Ramal">
+                </div>
+              </div>
+              <div class='col-sm-2' *ngIf="empresa.Telefones.length > 1">
+                <div class="form-group">
+                  <label class="control-label" for="Area">DDD</label>
+                  <input [disabled]="empresa.Telefones.length == 2" [(ngModel)]="empresa.Telefones[1].Area" class="form-control input-md" name="Area1" placeholder="Area">
+                </div>
+              </div>
+              <div class='col-md-3' *ngIf="empresa.Telefones.length > 1">
+                <div class="form-group">
+                  <label class="control-label" for="NumeroTel">Celular</label>
+                  <input [disabled]="empresa.Telefones.length == 2"  [(ngModel)]="empresa.Telefones[1].Numero" class="form-control input-md" name="NumeroTel1" type="tel" placeholder="Telefone">
+                </div>
+              </div>
+              <div class="col-md-12" ng-show="!iEstadual">
+                  <div class="form-group">
+                      <label class="control-label" for="email">E-mail para NFE</label>
+                      <input [(ngModel)]="emailFiscal" class="form-control input-md" required name="emailnfe" type="text" placeholder="E-mail">
+                    </div>
+              </div> 
+            </div>
+            <div class="row card-body m-b-final">
+                <div class="col-md-3 offset-md-6">
+                    <a class="btn btn-danger  fill" title="" href="/">Voltar ao Login</a>
+                </div>
+                <div class="col-md-3">
+                  <button (click)="register()"
+                    class="btn btn-success  fill">
+                    <span>
+                      Solicitar cadastro
+                    </span>
+                    <app-loader *ngIf="saving" [type]="'inner'"></app-loader>
+                  </button>
+                </div>
+              </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-sm-12">
+            <ngb-alert *ngIf="successMessage" type="success" (close)="successMessage = null">{{ successMessage }}</ngb-alert>
+          </div>
+        </div>
+        
+      </form>
+    </div>
+  </div>
+</div>

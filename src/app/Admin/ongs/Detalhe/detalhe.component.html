@@ -1,0 +1,112 @@
+<div class="row">
+  <div class="col-lg-12 grid-margin">
+    <div class="card">
+      <div class="card-body info" *ngIf="pedido != null">
+        <h5 class="card-title">Dados da ONG</h5>
+        <p><span>Nome da Empresa: </span> {{pedido.NomeEmpresa}}</p>
+        <p><span>Cnpj: </span> {{conformCnpj(pedido.Cnpj)}}</p>
+        <p><span>Razão Social:</span> {{ pedido.RazaoSocial }}</p>
+        <p><span>Inscrição Estadual: </span> {{ pedido.InscricaoEstadual}}</p>
+        <p ><span style="display:flex">Status Empresa:  
+          <p *ngIf="pedido.StatusEmpresa === 0">
+            <label class="badge badge-info ">Bloqueado  </label>
+          </p>
+          <p *ngIf="pedido.StatusEmpresa === 1">
+            <label class="badge badge-success">Ativo  </label>
+          </p>
+          <p *ngIf="pedido.StatusEmpresa === 2">
+            <label class="badge badge-primary">Inativo  </label>
+          </p>
+          <p *ngIf="pedido.StatusEmpresa === 3">
+            <label class="badge badge-danger">  Excluido </label>
+          </p>
+        </span>
+      </p>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="row">
+    <div class="col-lg-12 grid-margin">
+      <div class="card">
+        <div class="card-body info">
+            <h5 class="card-title">Endereços</h5>
+          <div *ngIf="pedido != null" >
+            <div  *ngFor="let endereco of pedido.Enderecos">
+
+              <h6 class="card-title">{{endereco.NomeEndereco ? endereco.NomeEndereco : 'Endereços'}}</h6>
+                <p><span>Logradouro: </span>{{endereco.Logradouro}}</p>
+                <p><span>Número: </span>{{endereco.Numero}}</p>  
+                <p><span>Complemento: </span>{{endereco.Complemento}}</p>
+                <p><span>CEP: </span>{{endereco.Cep}}</p>
+                <p><span>Bairro: </span>{{endereco.Bairro}}</p>
+                <p><span>Cidade: </span>{{endereco.Cidade}}</p>
+                <p><span>Estado: </span>{{ getNomeEstado(endereco.Estado)}}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+      <div class="col-lg-12 grid-margin">
+        <div class="card">
+          <div class="card-body info">
+              <h5 class="card-title">Telefones</h5>
+            <div *ngIf="pedido != null" >
+              <div  *ngFor="let telefone of pedido.Telefones" style="display:flex">
+                  
+                  <p><span>Número com DDD: </span> ({{telefone.Area}}) {{telefone.Numero}}</p> 
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-12 grid-margin">
+          <div class="card">
+            <div class="card-body info">
+                <h5 class="card-title">Intenções</h5>
+                <div *ngIf="pedido != null">
+                  <div  *ngFor="let intencao of pedido.Intencoes">
+                      <p>{{intencao.NomeIntencao}}</p>
+                  </div>
+                </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-lg-12 grid-margin">
+          <div class="card">
+            <div class="card-body info" *ngIf='pedido != null' >
+                <h5 class="card-title">Responsável</h5>
+                <div *ngIf='pedido.Responsavel == NULL'> Não existem Responsaveis asociados a esta Ong</div>
+                <div *ngIf='pedido.Responsavel != NULL'>
+                <p><span>Nome do Usuário: </span> {{pedido.Responsavel.NomeUsuario}}</p>
+                <p><span>Email: </span> {{pedido.Responsavel.Email}}</p>
+                <p><span>Cpf:</span> {{ conformCpf(pedido.Responsavel.Cpf) }}</p>
+                <h5 class="card-title">Endereços</h5>
+                <div *ngFor="let endereco of pedido.Responsavel.Enderecos">
+                    <p><span>Logradouro: </span>{{endereco.Logradouro}}</p>
+                    <p><span>Número: </span>{{endereco.Numero}}</p>  
+                    <p><span>Complemento: </span>{{endereco.Complemento}}</p>
+                    <p><span>CEP: </span>{{endereco.Cep}}</p>
+                    <p><span>Bairro: </span>{{endereco.Bairro}}</p>
+                    <p><span>Cidade: </span>{{endereco.Cidade}}</p>
+                    <p><span>Estado: </span>{{getNomeEstado(endereco.Estado)}}</p>
+                </div>
+                <div *ngIf="pedido.Responsavel.Enderecos.length == 0L" > Este usuário não possui endereços</div>
+                <h5 class="card-title">Telefones</h5>
+                <div  *ngFor="let telefone of pedido.Responsavel.Telefones" style="display:flex">
+                   
+                    <p><span>Número com DDD: </span> ({{telefone.Area}}) {{telefone.Numero}}</p> 
+                </div>
+                <div *ngIf="pedido.Responsavel.Telefones.length == 0" > Este usuário não possui telefones</div>
+                
+             </div>
+            </div>
+          </div>
+        </div>
+      </div>

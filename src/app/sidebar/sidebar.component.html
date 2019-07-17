@@ -1,0 +1,138 @@
+<nav *ngIf="!isloading"  class="sidebar sidebar-offcanvas" id="sidebar" style="margin-top:0px !important">
+  <ul class="nav" *ngIf="!isAdmin && !isAdminPrefeitura" style="margin-top:50px">
+    <li class="nav-item nav-category">
+      <span class="nav-link">Usuários</span>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" id="editperfil" (click)="isClicked('editperfil')" routerLink="/editar" routerLinkActive="active">
+        <i class="icon-user menu-icon"></i>
+        <span class="menu-title">Editar perfil</span>
+      </a>
+    </li>
+    <li class="nav-item" *ngIf="!isPessoaFisica">
+      <a class="nav-link" id='novousuario' (click)="isClicked('novousuario')" routerLink="/new-usuario" routerLinkActive="active">
+        <i class="icon-user-follow menu-icon"></i>
+        <span class="menu-title">Novo usuário</span>
+      </a>
+    </li>
+    <li class="nav-item nav-category" *ngIf="showMenu">
+      <span class="nav-link">Produtos</span>
+    </li>
+    <li class="nav-item" *ngIf="showMenu">
+      <a class="nav-link" id='meusprodutos' (click)="isClicked('meusprodutos')" routerLink="/produtos" routerLinkActive="active" >
+        <i class="icon-list menu-icon"></i>
+        <span class="menu-title">Meus produtos</span>
+      </a>
+    </li>
+    <!--li class="nav-item"  *ngIf="showMenu">
+      <a class="nav-link" id='novop' (click)="isClicked('novop')" routerLink="/produtos/novo" routerLinkActive="active">
+        <i class="icon-plus menu-icon"></i>
+        <span class="menu-title">Novo Produto</span>
+      </a>
+    </li-->
+    <li class="nav-item">
+      <a class="nav-link" id='vitrine' (click)="isClicked('vitrine')" routerLink="/vitrine" routerLinkActive="active">
+        <i class="icon-picture menu-icon"></i>
+        <span class="menu-title">Vitrine</span>
+      </a>
+    </li>
+    <li class="nav-item nav-category" *ngIf="showMenu">
+      <span class="nav-link">Anúncios</span>
+    </li>
+    <li class="nav-item" *ngIf="showMenu"> 
+      <a class="nav-link" id='anuncios' (click)="isClicked('anuncios');" routerLink="/anuncios" routerLinkActive="active">
+        <i class="icon-grid menu-icon"></i>
+        <span class="menu-title">Meus anúncios</span>
+      </a>
+    </li>
+
+    <li class="nav-item nav-category">
+      <span class="nav-link">Pedidos</span>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" id='compras' (click)="isClicked('compras')" routerLink="/pedidos" routerLinkActive="active">
+        <i class="icon-arrow-right menu-icon"></i>
+        <span class="menu-title">Compras/Doações</span>
+      </a>
+    </li>
+    <li class="nav-item" *ngIf="showMenu">
+      <a class="nav-link" id='vendas' (click)="isClicked('vendas')" routerLink="/vendas" routerLinkActive="active">
+        <i class="icon-arrow-left menu-icon"></i>
+        <span class="menu-title">Vendas/Doações</span>
+      </a>
+    </li>
+    <!--li class="nav-item">
+      <a disabled class="nav-link" (click)="isClicked()" routerLink="/carrinho" routerLinkActive="active">
+        <i class="icon-basket menu-icon"></i>
+        <span class="menu-title">Carrinho</span>
+      </a>
+    </li-->
+
+    <li class="nav-item nav-category">
+      <span class="nav-link">Empresas</span>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" id='empresas' (click)="isClicked('empresas')" routerLink="/empresas" routerLinkActive="active">
+        <i class="icon-globe menu-icon"></i>
+        <span class="menu-title">Minhas Empresas</span>
+      </a>
+    </li>
+  </ul>
+  <ul class="nav" *ngIf="isAdmin || isAdminPrefeitura">
+      <li class="nav-item nav-category" style="margin-top:70px">
+        <span class="nav-link">Painel de controle</span>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" id='deferimento' (click)="isClicked('deferimento')" routerLink="/admin/deferimento" routerLinkActive="active">
+          <i class="icon-user menu-icon"></i>
+          <span class="menu-title">Deferimento Cadastral</span>
+        </a>
+      </li>
+      <li *ngIf="isAdmin" class="nav-item">
+        <a  class="nav-link" id='categorias' (click)="isClicked('categorias')" routerLink="/admin/categorias" routerLinkActive="active">
+          <i class="icon-user-follow menu-icon"></i>
+          <span class="menu-title">Categorias</span>
+        </a>
+      </li>
+      <li *ngIf="isAdmin" class="nav-item">
+        <a  class="nav-link" id='erros' (click)="isClicked('erros')" routerLink="/admin/logerros" routerLinkActive="active">
+          <i class="icon-user-follow menu-icon"></i>
+          <span class="menu-title">Log Erros</span>
+        </a>
+      </li>
+      <li *ngIf="isAdmin" class="nav-item">
+        <a  class="nav-link" id='atividades' (click)="isClicked('atividades')" routerLink="/admin/logatividades" routerLinkActive="active">
+          <i class="icon-user-follow menu-icon"></i>
+          <span class="menu-title">Atividades</span>
+        </a>
+      </li>
+      <li *ngIf="isAdminPrefeitura" class="nav-item">
+        <a class="nav-link" id="vitrinedois" (click)="isClicked('vitrinedois')" routerLink="/vitrine" routerLinkActive="active">
+          <i class="icon-picture menu-icon"></i>
+          <span class="menu-title">Vitrine</span>
+        </a>
+      </li>
+      <li class="nav-item nav-category">
+        <span class="nav-link">Pedidos</span>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" id='allpedidos' (click)="isClicked('allpedidos')" routerLink="/admin/pedidos" routerLinkActive="active">
+          <i class="icon-list menu-icon"></i>
+          <span class="menu-title">Todos os pedidos</span>
+        </a>
+      </li>
+      <li class="nav-item nav-category" *ngIf="isAdminPrefeitura">
+        <span class="nav-link">ONG'S</span>
+      </li>
+      <li class="nav-item" >
+        <a class="nav-link" *ngIf="isAdminPrefeitura" id='ongs' (click)="isClicked('ongs')" routerLink="/admin/ongs" routerLinkActive="active">
+          <i class="icon-list menu-icon"></i>
+          <span class="menu-title">Ver todas as ONG'S</span>
+        </a>
+        <!--a class="nav-link"  (click)="isClicked()" routerLink="/admin/usuarios" routerLinkActive="active">
+          <i class="icon-list menu-icon"></i>
+          <span class="menu-title">Ver todos os Usuários</span>
+        </a-->
+      </li>
+    </ul>
+</nav>

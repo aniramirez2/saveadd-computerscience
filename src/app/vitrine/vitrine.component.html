@@ -1,0 +1,219 @@
+<ngx-spinner bdColor="rgba(51,51,51,0.8)" size="large" color="#00a99d" type="line-scale">
+  <p style="font-size: 20px; color: #00a99d">Carregando...</p>
+</ngx-spinner>
+<div class="row">
+  <div class="col-lg-12 grid-margin">
+    <div class="card">
+      <div class="card-body">
+        <div style="display:flex">
+          <h4 class="card-title">Vitrine de Produtos</h4>
+        </div>
+
+        <div class="container">
+          <div class="row">
+            <div *ngIf="showMenu" class="col-md-12 form-group" style="padding-left: 35px">
+              <input class="form-check-input" type="checkbox" name="meusAnuncios" id="meusAnuncios" [value]="seeAds"
+                (change)="selectedItem($event)" />
+              <span>Ver Apenas Meus Próprios Anúncios </span>
+            </div>
+            <div class="col-sm-7 form-group">
+              <label> Buscar </label>
+              <input [(ngModel)]="search" class="form-control" type="text" name="search" placeholder="Nome do produto">
+            </div>
+
+            <div class="col-sm-2 form-group" style="margin-top:25px; ">
+              <button class="btn btn-success" (click)="filterText()" style="width: stretch;">Buscar</button>
+            </div>
+
+            <div class="col-sm-3 form-group" style="margin-top:25px; " *ngIf="!isAdvancedFilter">
+
+              <button class="btn btn-info" (click)="FiltrosAvancados()" style="width: stretch;">Filtros
+                avançados</button>
+            </div>
+            <div class="col-sm-3 form-group" style="margin-top:25px; " *ngIf="isAdvancedFilter">
+
+              <button class="btn btn-info" (click)="OcultarFiltros()" style="width: stretch;">Ocultar Filtros</button>
+            </div>
+
+            <!--div class="col-md-12" *ngIf="filtrarporinteresses==true && isAdvancedFilter==false">
+              Restrito aos meus interesses
+            </div-->
+            <div class="col-md-12" *ngIf="filters.length > 0 && isAdvancedFilter==false">
+              <div class="row">
+                <div class="col-lg-3" *ngFor="let cat of filters">
+                  {{cat.nome}} - {{cat.value}}
+                </div>
+                <p style="color:blue;cursor: pointer;" (click)="limparFiltros()">Limpar filtros</p>
+              </div>
+            </div>
+            <div class="col-md-12 form-group" style="background-color:#38a1c3; padding: 5px"
+              *ngIf="isNotInteres && !later && !isAdminPrefeitura">
+              Para facilitar sua pesquisa, salve aqui quais itens te interessa
+              <button class="btn btn-info" (click)="informarInteresses()" style="margin-left: 50px">
+                Informar meus interesses
+              </button>
+              <button (click)="forlater()" class="btn btn-default" style="float:right">
+                Quem sabe mais tarde
+              </button>
+            </div>
+
+            <div class='col-md-4 form-group' *ngIf="isAdvancedFilter && !filtrarporinteresses">
+              <label>Categoria: </label>
+              <select name="categoria" class="form-control" [(ngModel)]="categoria"
+                (change)="filterByCat($event.target.value,'categoria')">
+                <option value="null" [selected]="true">
+                  <strong value="0">
+                    Sem Filtro
+                  </strong>
+                </option>
+                <option *ngFor="let cat of categories" [ngValue]="cat.IdCategoria">
+                  {{cat.NomeCategoria}}
+                  <div *ngFor="let ar of containsCategoria">
+                    <span *ngIf="cat.IdCategoria == ar.IdCategoria" style="color:grey">({{ar.count}})</span>
+                  </div>
+                </option>
+              </select>
+            </div>
+            <div class="col-lg-12" *ngIf="isAdvancedFilter && filtrarporinteresses && user.Interesses.length > 0">
+              Por favor remova o filtro de interesses para filtrar por categorias
+            </div>
+            <div class='col-md-4 form-group' *ngIf="isAdvancedFilter && !filtrarporinteresses">
+              <label>Subcategoria: </label>
+              <select name="subcategoria" [disabled]="subcategories.length == 0" class="form-control" #sub
+                [(ngModel)]="subcategoria" (change)="filterByCat(sub.value,'subcategoria')">
+                <app-loader *ngIf="loading_sbcategorie"></app-loader>
+                <option *ngFor='let cat of subcategories' [ngValue]="cat.IdCategoria">
+                  {{getNomeCategoria(cat.IdCategoria)}}
+                  <span style="color:grey">({{cat.count}})</span>
+                </option>
+              </select>
+            </div>
+            <div class='col-md-4 form-group' *ngIf="isAdvancedFilter && !filtrarporinteresses">
+              <label>Anunciante: </label>
+              <select name="anunciante" class="form-control" #anunciante="ngModel" [(ngModel)]="anuncianteText"
+                (change)="filterByAnunciantes(anunciante.value)">
+                <option value="NULL">
+                  Todos
+                </option>
+                <option *ngFor='let cat of anunciantes' [ngValue]="cat.IdEmpresa">
+                  {{ cat.NomeEmpresa}}
+                </option>
+              </select>
+            </div>
+            <div class="col-md-12" *ngIf=" isAdvancedFilter && isFIlteredByCat == false && !isAdminPrefeitura ">
+              <label for="manufacturer" *ngIf="user.Interesses.length == 0">Selecione os itens de sua preferência para
+                uma experiência mais personalizada na plataforma</label>
+              <!--div>
+                <li *ngFor="let item of interesses">{{item.NomeInteresse}} <i class="fa fa-close" (click)="removeInteresse(item.IdInteresse)"></i></li>
+              </div-->
+              <ng-select class="form-control" #select [items]="allinteresses | async" [multiple]=true
+                [closeOnSelect]="false" [searchable]="true" bindLabel="NomeInteresse" bindValue="IdInteresse"
+                [ngModel]="selectedPeople1" [ngModelOptions]="{standalone: true}" (add)="addInteresses($event)"
+                (remove)="removeInteresse($event)" [addTag]="true" maxSelectedItems=50 [loading]="loadingItems"
+                [placeholder]="interessesString">
+
+              </ng-select>
+              <div class="col-12" style="margin-top:10px">
+                <div style="float:right; margin-left: 10px">
+                  <button class="btn btn-success" (click)="updateUser()">Salvar</button>
+                </div>
+                <div style="float:right" (click)="isAdvancedFilter = false">
+                  <button class="btn btn-danger">Cancelar</button>
+                </div>
+
+              </div>
+
+            </div>
+            <div class="col-md-12" *ngIf="!setInteresses && interesses.length>0 && !isAdmin ">
+              <div class="input-group">
+                <div class=" form-check-inline">
+                  <input class="form-check-input" type="checkbox" name="sale" id="sale" [checked]="filtrarporinteresses"
+                    [(ngModel)]="filtrarporinteresses"
+                    (click)="this.filtrarporinteresses = !this.filtrarporinteresses; filterByInterest();">
+                  <label class="form-check-label" for="sale">Filtrar por meus interesses</label>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="row" *ngIf="!loading_page">
+  <div class="col-md-12" *ngIf="(categoria || search) && filteredAds.length < 1">
+    <div class="card text-center">
+      <div class="card-body">
+        <h3>Não foram encontrados anúncios</h3>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="col-xs-12 col-sm-6 col-md-4 grid-margin stretch-card vitrineProdutos"
+    *ngFor="let anuncio of filteredAds | paginate: { itemsPerPage: 9, currentPage: p }; let i = index"
+    [attr.data-index]="i">
+    <div class="card text-center">
+      <div class="card-body mb-3 lineCard">
+        <div class="demo-gallery-poster">
+          <ngb-carousel [wrap]="true" *ngIf="checkForImages(anuncio.Produtos[0])">
+            <div class="row" *ngFor="let image of anuncio.Produtos[0].imagems; let i = index">
+              <ng-template ngbSlide>
+                <img [src]="images_url + image.IdImagem" alt="Random first slide" class="max-350-img"
+                  (click)="detalhes(anuncio,i, seeAds)">
+              </ng-template>
+            </div>
+          </ngb-carousel>
+          <img *ngIf="!checkForImages(anuncio.Produtos[0])" src="assets/images/350x218.png" class=" mb-4 max-350-img" />
+          <div>
+          </div>
+        </div>
+      </div>
+      <h4>{{anuncio.Titulo}}</h4>
+      <p class="text-muted">{{getCategoria(anuncio.Categoria)}}</p>
+      <p class="card-text max-150">
+        {{anuncio.Descricao}}
+
+      </p>
+      <div class="row d-flex justify-content-between">
+        <div class="container">
+          <button (click)="detalhes(anuncio,i, seeAds)" class="btn btn-success btn-sm mt-3 mb-4">Detalhes</button>
+          <button *ngIf="seeAds" (click)="adicionaCarrinho(anuncio)"
+            class="btn btn-info btn-sm mt-3 mb-4">Comprar</button>
+        </div>
+      </div>
+      <div class="border-top pt-3">
+        <div class="row">
+          <div class="col-4" *ngIf="anuncio.Produtos[0].ValorUnitarioDesconto > 0">
+            <span class=" min"> Valor Original:</span>
+            <span class=" min"><del>{{anuncio.Produtos[0].ValorUnitarioOriginal | currency:'BRL' }}</del> </span>
+          </div>
+          <div class="col-3" *ngIf="anuncio.Produtos[0].ValorUnitarioDesconto > 0">
+            <div class="circle-promo">
+              <span>
+                {{getPercentDescount(anuncio.Produtos[0].ValorUnitarioOriginal,anuncio.Produtos[0].ValorUnitarioDesconto)}}%
+              </span>
+            </div>
+          </div>
+          <div class="col-5" *ngIf="anuncio.Produtos[0].ValorUnitarioDesconto > 0">
+            <span class=" min">Valor Final:</span><br>
+            <span class=" min"> {{anuncio.Produtos[0].ValorUnitarioDesconto | currency:'BRL' }}</span>
+          </div>
+          <div class="col-12">
+            <h1 class="font-weight-normal mb-4"></h1>
+            <p>
+              <span>Quantidade Disponível:</span> {{anuncio.Produtos[0].QuantidadeEstoque.toLocaleString('pt-BR')}}
+              {{anuncio.Produtos[0].Unidade}}</p>
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+  </div>
+  <div class="col-lg-12 justify-content-center">
+    <div class="row justify-content-center">
+      <pagination-controls previousLabel="Anterior" nextLabel="Seguinte" (pageChange)="p = $event">
+      </pagination-controls>
+    </div>
+  </div>

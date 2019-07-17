@@ -1,0 +1,115 @@
+<ngx-spinner 
+bdColor="rgba(51,51,51,0.8)"
+size="large"
+color="#00a99d"
+type="line-scale">
+<p style="font-size: 20px; color: #00a99d">Carregando...</p>
+</ngx-spinner>
+<div class="row">
+    <div class="col-lg-12 grid-margin">
+      <div class="card">
+        <div class="card-body">
+          <h4 class="card-title">Categorias</h4>
+          <div class="row justify-content-start"> 
+              <input *ngIf="edit"  [ngModel]="AddCategoria.IdCategoria" hidden>        
+              <div class="form-group col-sm-3">
+                <input  class="form-control"   [(ngModel)]="categoria.NomeCategoria" placeholder="Nome">            
+              </div>
+              <div class="form-group col-sm-3">
+                  <select name="categoria" class="form-control" [(ngModel)]="categoria.IdCategoria" (change)="onChangeCate($event)">
+                    <option selected *ngIf="edit" [ngValue]='categoria.IdCategoria' disabled >{{ nomeCategoria}}</option>
+                    <option value="null">É categoria pai</option>
+                    <option *ngFor='let categoria of onlyCategorias' [ngValue]="categoria.IdCategoria" >
+                      {{categoria.NomeCategoria}}
+                    </option>
+                  </select>
+                </div>
+              <div class="form-group col-sm-6">
+                <button *ngIf="!edit" (click)="addCategoria()" class="btn btn-success" >Adicionar</button>
+                <button *ngIf="edit" (click)="editCategoria()" class="btn btn-success" >Editar</button>
+                <button *ngIf="edit" (click)="close()" class="btn btn-default" >Cancelar</button>
+              </div>
+            </div>
+            <app-loader *ngIf="loading_page"></app-loader>
+            <div class="row">
+                <div class="form-group col-sm-12">
+                  <table id="order-listing" class="table">
+                    <thead>
+                      <tr class="bg-primary text-white " >
+                        <th colspan="12">
+                            Sugestão de inclusão de categoria e Subcategoria
+                        </th> 
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>Exemplo</td>
+                        <td *ngIf="categoria.IdCategoriaPai == null" > Categoria</td>
+                        <td *ngIf="categoria.IdCategoriaPai != null">Subcategoria</td>
+                        <td *ngIf="isFiltered == null">  </td>
+                        <td *ngIf="isFiltered != null"> </td>
+                        <td>
+                          
+                          <button  class="btn btn-info" (click)="editarCategoria(categoria,'i')">
+                            <i class="mdi mdi-eye"></i>Editar
+                          </button>
+                          <button  class="btn btn-danger" (click)="excluirCategoria(categoria,'i')">
+                            <i class="mdi mdi-close"></i>Reprovar
+                          </button>
+                          <button  class="btn btn-success" (click)="excluirCategoria(categoria,'i')">
+                            <i class="mdi mdi-check"></i>Aprovar
+                          </button>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+            </div>
+          <div class="row">
+            <div class="form-group col-sm-12">
+              <table id="order-listing" class="table">
+                <thead>
+                  <tr class="bg-primary text-white">
+                    <th>Nome </th>
+                    <th>Tipo <select class=" select-filter"  (change)="filterTipo($event)">
+                      <option value="0">Categoria</option>
+                      <option value="1">Subcategoria</option>
+                      <option value="2" selected>Sem filtro</option>
+                    </select></th>
+                    <th>Categoria Pai
+                      <select class=" select-filter" (change)="filterCatPai($event)">
+                        <option *ngFor='let categoria of onlyCategorias' [value]="categoria.IdCategoria" >
+                          {{categoria.NomeCategoria}}
+                        </option>
+                        <option value="0">
+                           Sem Filtro
+                        </option>
+                      </select>
+                    </th>
+                    <th>Ações</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let categoria of toList; let i = index" [attr.data-index]="i">
+                    <td>{{categoria.NomeCategoria}}</td>
+                    <td *ngIf="categoria.IdCategoriaPai == null" > Categoria</td>
+                    <td *ngIf="categoria.IdCategoriaPai != null">Subcategoria</td>
+                    <td *ngIf="isFiltered == null">{{getCategoriaPai(categoria.IdCategoriaPai)}}  </td>
+                    <td *ngIf="isFiltered != null"> {{ categoria.CategoriaPaiNome }}</td>
+                    <td>
+                      <button  class="btn btn-light" (click)="excluirCategoria(categoria, i)">
+                        <i class="mdi mdi-close text-danger"></i>Excluir
+                      </button>
+                      <button  class="btn btn-light" (click)="editarCategoria(categoria, i)">
+                        <i class="mdi mdi-eye text-primary"></i>Editar
+                      </button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

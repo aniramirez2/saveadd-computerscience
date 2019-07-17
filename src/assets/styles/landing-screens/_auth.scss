@@ -1,0 +1,84 @@
+/* Auth */
+.auth {
+	.lock-profile-img {
+		width: 90px;
+		height: 90px;
+		border-radius: 100%;
+	}
+
+	.auth-form-dark {
+		background: rgba(000, 000, 000, 0.6);
+		color: #ffffff;
+
+		.form-control {
+			border-color: rgba(255, 255, 255, 0.2);
+			color: #ffffff;
+		}
+	}
+
+	.auth-form-light {
+		background: #ffffff;
+		color: #000;
+
+		.form-control {
+			border-color: rgba(000, 000, 000, 0.2);
+			color: #000;
+		}
+	}
+
+	.auth-form-transparent {
+		background: transparent;
+		color: #ffffff;
+
+		form {
+			.form-group {
+				.form-control {
+					padding-left: 1rem;
+					padding-right: 1rem;
+					border-color: rgba(#ffffff, .2);
+				}
+			}
+		}
+	}
+
+	form {
+		.form-group {
+			position: relative;
+
+			label {
+				margin-bottom: 0;
+				vertical-align: bottom;
+				font-size: 0.8125rem;
+			}
+
+			.form-control {
+				background: transparent;
+				border-top: 0;
+				border-left: 0;
+				border-right: 0;
+				border-radius: 0;
+				padding-left: 0;
+				padding-right: 2.5rem;
+				font-size: 0.9375rem;
+			}
+
+			i {
+				position: absolute;
+				right: 1rem;
+				height: 18px;
+				top: calc((100% - 18px) / 2);
+			}
+		}
+
+		.btn {
+			font-size: 1.25rem;
+		}
+
+		.auth-link {
+
+			&:hover {
+				color: initial;
+			}
+		}
+	}
+}

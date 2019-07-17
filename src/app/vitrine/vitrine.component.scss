@@ -1,0 +1,53 @@
+*{font-family: "Open Sans";}
+.form-control{line-height: initial;}
+.detalhes{
+  line-height: 1;
+  text-align: left;
+  h6{
+    font-weight: bold;
+  }
+}
+.vitrineProdutos .card-body{
+  padding: 10px 10px 0;
+}
+.lineCard{
+  border-bottom: 1px solid #DDD;
+}
+.max-350-img{
+  max-width: 300px;
+  height: auto;
+}
+.max-150{
+
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 290px;
+    padding-left: 30px;
+  
+}
+.linkblue{
+  color:blue !important;
+  cursor:pointer;
+  text-decoration:underline !important;
+  margin-left: 10px
+}
+.min{
+  font-size:8pt
+}
+.circle-promo{
+  background-color: black;
+  color:white;
+  border-radius: 45px;
+  padding: 12px;
+  font-size: 10pt
+}
+.demo-gallery-poster img {
+      display: block;
+      margin:0 auto;
+      height: 300px;
+  }
+  #ngb-slide-1{
+    display: none
+  }
+  

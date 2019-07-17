@@ -1,0 +1,145 @@
+<div class="row">
+  <div class="col-lg-12">
+    <div class="card">
+      <div class="card-body">
+        <h4 *ngIf="!matriz" class="card-title">Criar Empresa</h4>
+        <h4 *ngIf="matriz" class="card-title">Adicionar Filial</h4>
+
+        <div class="wrapper align-items-center container">
+          <form #createForm="ngForm">
+            <div class="row" *ngIf="matriz">
+              <div class="form-group col-sm-12">
+                <label>CNPJ Matriz</label>
+                <input [textMask]="{mask: cnpjMask}" [disabled]="matriz" [ngModel]="matriz.Cnpj | minDigits:14" (ngModelChange)="matriz.Cnpj=$event"
+                  type="text" name="matriz" class="form-control">
+              </div>
+            </div>
+
+            <div class="row">
+
+              <div class="form-group col-sm-12">
+                <label>CNPJ</label>
+                <div class="input-group mb-3">
+                  <div class="input-group-prepend">
+                    <button (click)="buscaEmpresaOnReceita()" class="btn btn-success">Buscar</button>
+                  </div>
+                  <input [ngClass]="{'alert-danger': not_found}" maxlength="20" [textMask]="{mask: cnpjMask}" (ngModelChange)="updateCnpj($event)"
+                    [ngModel]="cnpjToSearch" type="text" name="cnpj" class="form-control">
+                </div>
+              </div>
+              <div class="form-group col-sm-6">
+              </div>
+            </div>
+            <app-loader *ngIf="searching"></app-loader>
+
+            <div class="row" *ngIf="empresa.Cnpj && !searching">
+              <div class="form-group col-sm-12">
+                <label>Razão Social</label>
+                <input [(ngModel)]="empresa.RazaoSocial" required type="text" name="raz-social" class="form-control">
+              </div>
+              <div class="form-group col-sm-12">
+                <label>Nome da Empresa</label>
+                <input [(ngModel)]="empresa.NomeEmpresa" required type="text" name="nome-empresa" class="form-control">
+              </div>
+              <div class="form-group col-sm-12">
+                <label>Inscricao Estadual</label>
+                <input [(ngModel)]="empresa.InscricaoEstadual" type="text" name="insc-estatual" class="form-control">
+              </div>
+
+              <div class="col-sm-12">
+                <h3>Endereço</h3>
+              </div>
+
+              <div class="form-group col-sm-6">
+                <label>CEP</label>
+                <input [(ngModel)]="endereco.Cep" type="text" required name="cep" class="form-control">
+              </div>
+              <div class="form-group col-sm-6">
+                <label>Logradouro</label>
+                <input [(ngModel)]="endereco.Logradouro" type="text" required name="logradoouro" class="form-control">
+              </div>
+              <div class="form-group col-sm-6">
+                <label>Número</label>
+                <input [(ngModel)]="endereco.Numero" type="text" required name="numero" class="form-control">
+              </div>
+              <div class="form-group col-sm-6">
+                <label>Bairro</label>
+                <input [(ngModel)]="endereco.Bairro" type="text" name="bairro" required class="form-control">
+              </div>
+              <div class="form-group col-sm-6">
+                <label>Cidade</label>
+                <input [(ngModel)]="endereco.Cidade" type="text" required name="cidade" class="form-control">
+              </div>
+              <div class="form-group col-sm-6">
+                <label>Estado</label>
+                <input disabled [(ngModel)]="endereco.Estado" type="text" required name="estado" class="form-control">
+              </div>
+              <div class="form-group col-sm-6">
+                <label>País</label>
+                <input [(ngModel)]="endereco.Pais" type="text" required name="pais" class="form-control">
+              </div>
+              <div class="col-sm-12">
+                <div class="form-check form-group form-check-inline">
+                  <input [(ngModel)]="endereco.RecebeEntrega" type="checkbox" class="form-check-input" name="res-entrega">
+                  <label class="form-check-label">Aceita retirada</label>
+                </div>
+                <div *ngIf="endereco.RecebeEntrega == 1">
+                    <div class="form-group ">
+                      <label>Regras de retirada</label>
+                      <input class="form-control"  name="regrasRetirada" [(ngModel)]="endereco.RegraRetirada">
+                    </div>
+                  </div>
+                
+                <div class="form-check form-group form-check-inline">
+                  <input [(ngModel)]="endereco.RealizaEntrega" type="checkbox" class="form-check-input" name="rea-entrega">
+                  <label class="form-check-label">Realiza entrega</label>
+                </div>
+                <div *ngIf="endereco.RealizaEntrega == 1">
+                  <div class="form-group ">
+                    <label>Regras de entrega</label>
+                    <input class="form-control" name="regrasEntrega" [(ngModel)]="endereco.RegraEntrega">
+                  </div>
+                </div>
+              </div>
+
+
+              <div class="col-sm-12">
+                <h3>Telefone</h3>
+              </div>
+
+              <div class="form-group col-sm-6">
+                <label>Area</label>
+                <input [(ngModel)]="telefone.Area" required type="text" name="area" class="form-control">
+              </div>
+              <div class="form-group col-sm-6">
+                <label>Número</label>
+                <input [(ngModel)]="telefone.Numero" required type="text" name="numero" class="form-control">
+              </div>
+              <div class="form-group col-sm-6">
+                <label>Ramal</label>
+                <input [(ngModel)]="telefone.Ramal" type="text" name="ramal" class="form-control">
+              </div>
+              <div class="form-group col-sm-6">
+                <label>País</label>
+                <input [disabled]="telefone.Pais && empresa.Cnpj" [(ngModel)]="telefone.Pais" required type="text" name="pais" class="form-control">
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-sm-6">
+                <button (click)="saveEmpresa()" [disabled]="saving || !createForm.form.valid || !empresa.Cnpj || created" class="btn btn-success">
+                  <span *ngIf="!saving">
+                    Salvar
+                  </span>
+                  <app-loader *ngIf="saving" [type]="'inner'"></app-loader>
+                </button>
+              </div>
+              <div class="col-sm-6">
+                <button (click)="activeModal.close(created)" type="button" class="btn btn-light float-right">Fechar</button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

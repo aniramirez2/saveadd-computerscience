@@ -1,0 +1,60 @@
+<div class="row">
+  <div class="col-lg-12 grid-margin">
+    <div class="card">
+      <div class="card-body info" *ngIf="usuarios != null">
+        <div class="row">
+          <div class="col-md-6">
+          <h5 class="card-title">Dados da ONG</h5>
+          <p><span>Nome da Empresa: </span> {{usuarios.NomeEmpresa}}</p>
+          <p><span>Cnpj: </span> {{conformCnpj(usuarios.Cnpj)}}</p>
+          <p><span>Razão Social:</span> {{ usuarios.RazaoSocial }}</p>
+          <p><span>Inscrição Estadual: </span> {{ usuarios.InscricaoEstadual}}</p>
+          <p ><span style="display:flex">Status Empresa:  
+            <p *ngIf="usuarios.StatusEmpresa === 0">
+              <label class="badge badge-info ">Bloqueado  </label>
+            </p>
+            <p *ngIf="usuarios.StatusEmpresa === 1">
+              <label class="badge badge-success">Ativo  </label>
+            </p>
+            <p *ngIf="usuarios.StatusEmpresa === 2">
+              <label class="badge badge-primary">Inativo  </label>
+            </p>
+            <p *ngIf="usuarios.StatusEmpresa === 3">
+              <label class="badge badge-danger">  Excluido </label>
+            </p>
+          </span>
+        </p>
+      </div>
+      <div class="col-md-6">
+        <h5 class="card-title">Dados do deferimento</h5>
+        <p><span>Data Inclusão: </span> {{pedido.DataInclusao  | date: 'dd/MM/yyy' }}</p>
+        <p><span>Data Deferimento: </span> {{pedido.DataDeferimento  | date: 'dd/MM/yyy'}}</p>
+        <p><span>Usuario Asociado: </span> {{pedido.NomeUsuario}}</p>
+        <p *ngIf="pedido.StatusDeferimento === 0">
+            <span>Status Deferimento: </span>
+          <label class="badge badge-info ">Pendente  </label>
+        </p>
+        <p *ngIf="pedido.StatusDeferimento === 1">
+            <span>Status Deferimento: </span>
+          <label class="badge badge-success">Aprovado  </label>
+        </p>
+        <p *ngIf="pedido.StatusDeferimento === 2">
+            <span>Status Deferimento: </span>
+          <label class="badge badge-danger"> Cancelado  </label>
+        </p>   
+        
+      </div>
+      <div class="col-lg-12" >
+          <button style="float:right" class="btn btn-success" (click)="atualizarPedido(1, pedido)">
+              <i class="fa fa-check" style="color:white"> </i> Aprovar
+            </button>
+          <button style="float:right; margin-right: 10px" class="btn btn-danger" (click)="atualizarPedido(2, pedido)">
+              <i class="fa fa-close" style="color:white"> </i> Reprovar
+          </button>
+          
+        </div>
+      </div>
+      </div>      
+    </div>
+  </div>
+</div>

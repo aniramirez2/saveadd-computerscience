@@ -1,0 +1,85 @@
+<ngb-datepicker class="datepicker" [displayMonths]="1" [navigation]="true"
+[showWeekNumbers]="false" *ngIf="bool" (select)="onDateSelect($event)"></ngb-datepicker>
+<ngx-spinner 
+bdColor="rgba(51,51,51,0.8)"
+size="large"
+color="#00a99d"
+type="line-scale">
+<p style="font-size: 20px; color: #00a99d">Carregando...</p>
+</ngx-spinner>
+<div class="row">
+  <div class="col-lg-12 grid-margin">
+    <div class="card">
+      <div class="card-body">
+        <h4 class="card-title">ONG's</h4>
+        
+        <div class="row">
+          <div class="col-12">
+              
+             <table id="order-listing" class="table">
+              <thead>
+                <tr class="bg-primary text-white">
+                  <th>Nome</th>
+                  <th>Cnpj</th>
+                  <th>Status</th>
+                  <th>Endereço</th>
+                  <th>Telefone</th>
+                  <th>Intenções</th>
+                  <th>Ação</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let pedido of pedidos">
+                  <td>{{pedido.NomeEmpresa}}</td>
+                  <td> {{conformCnpj(pedido.Cnpj)}}</td>
+                  <td *ngIf="pedido.StatusEmpresa === 0">
+                    <label class="badge badge-info ">Bloqueado  </label>
+                  </td>
+                  <td *ngIf="pedido.StatusEmpresa === 1">
+                    <label class="badge badge-success">Ativo  </label>
+                  </td>
+                  <td *ngIf="pedido.StatusEmpresa === 2">
+                    <label class="badge badge-primary">Inativo  </label>
+                  </td>
+                  <td *ngIf="pedido.StatusEmpresa === 3">
+                    <label class="badge badge-danger">  Excluido </label>
+                  </td>
+                  <td> {{  pedido.Enderecos[0].Logradouro  }}, {{pedido.Enderecos[0].Numero}} - {{ getNomeEstado(pedido.Enderecos[0].Estado)}}</td>
+                  <td>({{ pedido.Telefones[0].Area }}) - {{pedido.Telefones[0].Numero }}</td>
+                  <td>
+                    <span *ngFor="let intencao of pedido.Intencoes">
+                      {{intencao.NomeIntencao}}
+                    </span>
+                  </td>
+                  <td>
+                    <button class="btn btn-light" (click)="viewPedido(pedido.IdEmpresa)">
+                      <i class="fa fa-eye" style="color:blue"></i>
+                    </button>
+                  </td>
+                </tr>
+                <tr>
+                  <td colspan="4">Total: 
+                    <span *ngIf="pedidos.length > 1">{{pedidos.length}}</span>
+                    <span *ngIf="pedidos.length < 1">0</span>
+                  </td>
+                  
+                </tr>
+
+                
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div class="container" *ngIf="pedidos.length < 1">
+          <div class="row">
+            <div class="col-sm-12">
+              <h3>Não há Ong's cadastradas no momento</h3>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
